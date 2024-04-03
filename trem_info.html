@@ -256,11 +256,9 @@
 
         async function start() {
             await fetchStationInfo();
-            await fetchEqData();
             await fetchRegionInfo();
-            await fetchTREMData();
 
-            const trem = searchTrem(params.id);
+            const trem = await searchTrem(params.id);
 
             let eq = null;
 
@@ -272,7 +270,7 @@
                 link.href = `https://www.cwa.gov.tw/V8/C/E/EQ/EQ${cwa_ids[0]}-${cwa_ids[2]}-${cwa_ids[3]}.html`;
                 link.target = "_blank";
 
-                eq = searchEq(trem.Cwa_id);
+                eq = await searchEq(trem.Cwa_id);
 
                 let loc_str = "未知區域";
 
@@ -538,15 +536,21 @@
             return null;
         }
 
-        function searchTrem(id) {
-            for (const trem of trem_data) {
-                if (trem.ID == id) return trem;
+        async function searchTrem(id) {
+            try {
+                const res = await fetch(`https://api.exptech.com.tw/api/v1/trem/list/${id}?key=${params.key}`);
+                return await res.json();
+            } catch (err) {
+                console.log(err);
             }
         }
 
-        function searchEq(id) {
-            for (const eq of eq_data) {
-                if (eq.id == id) return eq;
+        async function searchEq(id) {
+            try {
+                const res = await fetch(`https://lb-${Math.ceil(Math.random() * 4)}.exptech.com.tw/api/v2/eq/report/${id}?key=${params.key}`);
+                return await res.json();
+            } catch (err) {
+                console.log(err);
             }
         }
 
@@ -557,24 +561,6 @@
                 }
             }
             return "未知區域";
-        }
-
-        async function fetchEqData() {
-            try {
-                const res = await fetch(`https://lb-${Math.ceil(Math.random() * 4)}.exptech.com.tw/api/v2/eq/report?limit=50&key=${params.key}`);
-                eq_data = await res.json();
-            } catch (err) {
-                console.log(err);
-            }
-        }
-
-        async function fetchTREMData() {
-            try {
-                const res = await fetch(`https://api.exptech.com.tw/api/v1/trem/list?key=${params.key}`);
-                trem_data = await res.json();
-            } catch (err) {
-                console.log(err);
-            }
         }
 
         async function fetchStationInfo() {
