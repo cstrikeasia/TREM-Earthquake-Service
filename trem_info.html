@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta content="TREM | 檢知報告" property="og:title" />
     <meta content="Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )" property="og:description" />
-    <meta content="https://api.exptech.com.tw/file/trem_report.html" property="og:url" />
+    <meta content="https://api-1.exptech.com.tw/file/trem_report.html" property="og:url" />
     <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/ExpTech.jpg" property="og:image" />
 </head>
 
@@ -116,7 +116,7 @@
         }
     </style>
     <div>
-        <a href="https://api.exptech.com.tw/file/trem_report.html">返回</a>
+        <a href="https://api-1.exptech.com.tw/file/trem_report.html">返回</a>
         <table id="cwa-table" style="display: none;">
             <thead>
                 <tr>
@@ -285,8 +285,9 @@
                 document.getElementById("cwa-depth").textContent = `${eq.depth}km`;
                 document.getElementById("cwa-mag").textContent = `M ${eq.mag.toFixed(1)}`;
                 const max = document.getElementById("cwa-max");
-                max.textContent = int_to_intensity(eq.int);
-                max.className = `intensity-${eq.int}`;
+                const int = findMaxInt(eq.list);
+                max.textContent = int_to_intensity(int);
+                max.className = `intensity-${int}`;
             }
 
             document.getElementById("EventID").textContent = `EventID:  ${formatTime(Number(trem.ID)).replaceAll("/", "").replaceAll(":", "").replace(" ", "")}`;
@@ -335,7 +336,7 @@
                 const trigger = document.createElement("td");
                 trigger.textContent = eew.trigger;
                 const alarm = document.createElement("td");
-                alarm.textContent = (eew.eq.max > 4) ? "TRUE" : "";
+                alarm.textContent = (eew.status == 1) ? "TRUE" : "";
                 const dist = document.createElement("td");
                 dist.textContent = (eq) ? distance(eew.eq.lat, eew.eq.lon)(eq.lat, eq.lon).toFixed(1) : "未知";
 
@@ -432,7 +433,7 @@
 
             const station_list = JSON.parse(trem.List);
 
-            fetch("https://api.exptech.com.tw/api/v1/trem/info", {
+            fetch("https://api-1.exptech.com.tw/api/v1/trem/info", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ list: station_list }),
@@ -502,7 +503,7 @@
                         end.textContent = station.end;
                         const zip = document.createElement("td");
                         const link = document.createElement("a");
-                        link.href = `https://api.exptech.com.tw/file/trem_report/${station.ID}.zip`;
+                        link.href = `https://api-1.exptech.com.tw/file/trem_report/${station.ID}.zip`;
                         link.target = "_blank";
                         link.textContent = "zip";
                         zip.append(link);
@@ -538,7 +539,7 @@
 
         async function searchTrem(id) {
             try {
-                const res = await fetch(`https://api.exptech.com.tw/api/v1/trem/list/${id}?key=${params.key}`);
+                const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/list/${id}?key=${params.key}`);
                 return await res.json();
             } catch (err) {
                 console.log(err);
@@ -547,7 +548,7 @@
 
         async function searchEq(id) {
             try {
-                const res = await fetch(`https://lb-${Math.ceil(Math.random() * 4)}.exptech.com.tw/api/v2/eq/report/${id}?key=${params.key}`);
+                const res = await fetch(`https://api-1.exptech.com.tw/api/v2/eq/report/${id}?key=${params.key}`);
                 return await res.json();
             } catch (err) {
                 console.log(err);
@@ -583,7 +584,7 @@
 
         async function fetchTREMEEW(id) {
             try {
-                const res = await fetch(`https://api.exptech.com.tw/api/v1/trem/report/${id}`);
+                const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/report/${id}`);
                 return await res.json();
             } catch (err) {
                 console.log(err);
@@ -624,6 +625,14 @@
 
         function intensity_float_to_int(float) {
             return (float < 0) ? 0 : (float < 4.5) ? Math.round(float) : (float < 5) ? 5 : (float < 5.5) ? 6 : (float < 6) ? 7 : (float < 6.5) ? 8 : 9;
+        }
+
+        function findMaxInt(data) {
+            let maxInt = null;
+            for (const key of Object.keys(data))
+                if (maxInt == null || data[key].int > maxInt)
+                    maxInt = data[key].int;
+            return maxInt;
         }
     </script>
 </body>
