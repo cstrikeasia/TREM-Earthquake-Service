@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta content="TREM | 檢知報告" property="og:title" />
     <meta content="Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )" property="og:description" />
-    <meta content="https://api.exptech.com.tw/file/trem_report.html" property="og:url" />
+    <meta content="https://api-1.exptech.com.tw/file/trem_report.html" property="og:url" />
     <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/ExpTech.jpg" property="og:image" />
 </head>
 
@@ -189,7 +189,7 @@
                 const index = document.createElement("td");
                 index.textContent = i;
                 const link = document.createElement("a")
-                link.href = `https://api.exptech.com.tw/file/trem_info.html?id=${trem.ID}&key=${params.key}`;
+                link.href = `https://api-1.exptech.com.tw/file/trem_info.html?id=${trem.ID}&key=${params.key}`;
                 link.target = "_blank";
                 link.textContent = formatTime(Number(trem.ID)).replaceAll("/", "").replaceAll(":", "").replace(" ", "");
                 const id = document.createElement("td");
@@ -256,7 +256,7 @@
 
         async function fetchEqData() {
             try {
-                const res = await fetch(`https://lb-${Math.ceil(Math.random() * 4)}.exptech.com.tw/api/v2/eq/report?limit=50&key=${params.key}`);
+                const res = await fetch(`https://api-1.exptech.com.tw/api/v2/eq/report?limit=50&key=${params.key}`);
                 eq_data = await res.json();
             } catch (err) {
                 console.log(err);
@@ -265,7 +265,7 @@
 
         async function fetchTREMData() {
             try {
-                const res = await fetch(`https://api.exptech.com.tw/api/v1/trem/list?key=${params.key}`);
+                const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/list?key=${params.key}`);
                 trem_data = await res.json();
             } catch (err) {
                 console.log(err);
