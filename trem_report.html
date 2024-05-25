@@ -78,7 +78,7 @@
     const checkbox = document.getElementById("checkbox");
     const dev_mode = document.getElementById("dev_mode");
     if (params.dev) checkbox.checked = true;
-
+	console.log(params.dev);
     dev_mode.addEventListener("click", () => {
       checkbox.click();
       if (checkbox.checked) urlSearchParams.set("dev", true);
@@ -94,7 +94,13 @@
 	  await fetchTREMData();
 	  await fetchMonthData();
 
-	  const data = trem_data;
+	  let data;
+	  if(!params.time){
+		data = trem_data;
+	  } else {
+		data = await fetchSpecifyMonthData(params.time);
+	  }
+	  
 	  eew_table(data);
 	  hideLoading();
 	  // get month
@@ -139,8 +145,12 @@
 
 			showLoading();
 			const sp_month_data = await fetchSpecifyMonthData(day);
-			currentPage = 1;
-			eew_table(sp_month_data);
+			console.log(day);
+			urlSearchParams.set("time", day)
+			const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
+			history.replaceState(null, '', newUrl);
+			window.location.reload();
+			
 			hideLoading();
 		  });
 		}
