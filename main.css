@@ -6,12 +6,16 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+    user-select: none;
   }
 
   .title {
-    color: #ff0000;
+    color: red;
     padding: 10px;
     font-weight: bold;
+    background-color: #ffebee;
+    border: 1px solid #f44336;
+    margin-bottom: 20px;
   }
 
   .title a {
@@ -25,6 +29,10 @@
   .title a:last-of-type {
     font-size: 18px;
     display: block;
+  }
+  
+  a {
+    text-decoration: none;
   }
 
   #month {

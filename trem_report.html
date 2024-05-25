@@ -11,11 +11,11 @@
   <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 
-<body style="display: grid;justify-content: center;text-align: center;">
+<body style="display: grid;text-align: center;">
   <div style="display: grid;justify-items: center;">
-    <div style="color: red;padding: 3px;font-weight: 900;" class="title">
-      <a style="font-size: 25px;">僅供參考 實際結果請依 中央氣象署 發布之內容為準</a><br>
-      <a style="font-size: 18px;">下方表格中 若未特別註記 資料來源均為 TREM</a>
+    <div class="title">
+      <a>僅供參考 實際結果請依 中央氣象署 發布之內容為準</a><br>
+      <a>下方表格中 若未特別註記 資料來源均為 TREM</a>
     </div>
 
     <table id="month">
@@ -102,59 +102,68 @@
 	}
     start();
 
-    function month_btn() {
-      const month_ = document.getElementById('month');
-      let row = document.createElement('tr');
-      let cellCount = 0;
+	function month_btn() {
+	  const month_ = document.getElementById('month');
+	  let row = document.createElement('tr');
+	  let cellCount = 0;
 
-      for (const month of month_data) {
-        const cell = document.createElement('td');
-        const link = document.createElement('a');
-        const day = month['year-month'];
-        link.textContent = `${month['year-month']} (${month.count})`;
-        cell.appendChild(link);
-        row.appendChild(cell);
+	  const allMonths = Array(12).fill(null);
+	  
+	  month_data.forEach(month => {
+		const [year, monthNumber] = month['year-month'].split('-').map(Number);
+		allMonths[monthNumber - 1] = month;
+	  });
 
-        cell.addEventListener('click', async () => {
-          if (cell.classList.contains('active')) {
-            return;
-          }
+	  allMonths.forEach((month, index) => {
+		const cell = document.createElement('td');
 
-          const clickedCell = cell;
+		if (month) {
+		  const link = document.createElement('a');
+		  const day = month['year-month'];
+		  link.textContent = `${month['year-month']} (${month.count})`;
+		  cell.appendChild(link);
 
-          const activeCells = document.querySelectorAll('.active');
+		  cell.addEventListener('click', async () => {
+			if (cell.classList.contains('active')) {
+			  return;
+			}
 
-          activeCells.forEach(cell => {
-            cell.classList.remove('active');
-          });
+			const clickedCell = cell;
 
-          clickedCell.classList.add('active');
+			const activeCells = document.querySelectorAll('.active');
+			activeCells.forEach(cell => {
+			  cell.classList.remove('active');
+			});
 
-          showLoading();
-          const sp_month_data = await fetchSpecifyMonthData(day);
-          currentPage = 1;
-          eew_table(sp_month_data);
-          hideLoading();
-        });
+			clickedCell.classList.add('active');
 
-        cellCount++;
-        if (cellCount === 12) {
-          month_.getElementsByTagName('tbody')[0].appendChild(row);
-          row = document.createElement('tr');
-          cellCount = 0;
-        }
-      }
+			showLoading();
+			const sp_month_data = await fetchSpecifyMonthData(day);
+			currentPage = 1;
+			eew_table(sp_month_data);
+			hideLoading();
+		  });
+		}
 
-      while (cellCount < 12) {
-        const cell = document.createElement('td');
-        row.appendChild(cell);
-        cellCount++;
-      }
+		row.appendChild(cell);
+		cellCount++;
 
-      if (cellCount > 0) {
-        month_.getElementsByTagName('tbody')[0].appendChild(row);
-      }
-    }
+		if (cellCount === 12) {
+		  month_.getElementsByTagName('tbody')[0].appendChild(row);
+		  row = document.createElement('tr');
+		  cellCount = 0;
+		}
+	  });
+
+	  if (cellCount > 0) {
+		while (cellCount < 12) {
+		  const emptyCell = document.createElement('td');
+		  row.appendChild(emptyCell);
+		  cellCount++;
+		}
+		month_.getElementsByTagName('tbody')[0].appendChild(row);
+	  }
+	}
 
     function showLoading() {
       document.getElementById("loading").style.display = "block";
