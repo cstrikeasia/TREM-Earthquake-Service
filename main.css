@@ -1,0 +1,288 @@
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .title {
+    color: #ff0000;
+    padding: 10px;
+    font-weight: bold;
+  }
+
+  .title a {
+    text-decoration: none;
+  }
+
+  .title a:first-of-type {
+    font-size: 25px;
+  }
+
+  .title a:last-of-type {
+    font-size: 18px;
+    display: block;
+  }
+
+  #month {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  #month td {
+    background: linear-gradient(135deg, #fff, #f7f7f7);
+    padding: 15px 20px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s ease;
+  }
+
+  #month td a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: block;
+  }
+
+  #month td:hover {
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+    transform: scale(1.05);
+  }
+
+  #month td a:hover {
+    color: #0056b3;
+  }
+
+  #month td:last-child {
+    border-right: none;
+  }
+
+  #month tr:last-child td {
+    border-bottom: none;
+  }
+
+  #month td {
+    cursor: pointer;
+    width: 152.48px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  caption {
+    caption-side: bottom;
+    padding: 10px;
+    font-weight: bold;
+    background-color: #fff;
+  }
+
+  thead {
+    background-color: rgb(228, 240, 245);
+    border: 1px solid #c4c4c4;
+  }
+
+  th,
+  td {
+    padding: 12px 15px;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  td.active {
+    background: #a5d1ff !important;
+  }
+
+  th {
+    background-color: #f1f1f1;
+  }
+
+  tbody>tr:nth-of-type(even) {
+    background-color: rgb(237, 238, 242);
+  }
+
+  tbody>tr:hover {
+    background-color: rgb(220, 230, 235);
+    color: #333;
+  }
+
+  tbody>tr {
+    transition: all 0.3s ease;
+  }
+
+  .data tbody>tr {
+    border: 1px solid #c4c4c4;
+  }
+
+  td:last-of-type {
+    text-align: center;
+  }
+
+  tbody:has(> tr:hover)>tr:not(:hover) {
+    opacity: 0.6;
+  }
+
+  table {
+    font-family: sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  .data tr {
+    border: 1px solid #c4c4c4;
+  }
+
+  .data th {
+    border: 1px solid #c4c4c4;
+  }
+
+  .intensity-1 {
+    color: white;
+    background-color: #003264;
+  }
+
+  .intensity-2 {
+    color: white;
+    background-color: #0064C8;
+  }
+
+  .intensity-3 {
+    color: white;
+    background-color: #1E9632;
+  }
+
+  .intensity-4 {
+    color: black;
+    background-color: #FFC800;
+  }
+
+  .intensity-5 {
+    color: black;
+    background-color: #FF9600;
+  }
+
+  .intensity-6 {
+    color: black;
+    background-color: #FF6400;
+  }
+
+  .intensity-7 {
+    color: white;
+    background-color: #FF0000;
+  }
+
+  .intensity-8 {
+    color: white;
+    background-color: #C00000;
+  }
+
+  .intensity-9 {
+    color: white;
+    background-color: #9600C8;
+  }
+
+  .lpgm-1 {
+    color: white;
+    background-color: #0041ff;
+  }
+
+  .lpgm-2 {
+    color: #333333;
+    background-color: #ffe600;
+  }
+
+  .lpgm-3 {
+    color: white;
+    background-color: #ff2800;
+  }
+
+  .lpgm-4 {
+    color: white;
+    background-color: #a50021;
+  }
+
+  #checkbox {
+    display: none;
+  }
+
+  #checkbox+a {
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+  }
+
+  #checkbox+a:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+  }
+
+  #checkbox:checked+a:before {
+    background-color: #2196F3;
+    border-color: #2196F3;
+  }
+
+  #checkbox:checked+a:before:after {
+    content: "\2713";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    color: #fff;
+  }
+  
+#loading {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 9999;
+}
+
+#loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+}
+
+.spinner-circle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 5px solid transparent;
+  border-top-color: #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

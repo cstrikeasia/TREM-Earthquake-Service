@@ -1,295 +1,302 @@
+<!DOCTYPE html>
 <html lang="zh-Hant">
 
 <head>
-    <title id="title"></title>
-    <meta charset="utf-8" />
-    <meta content="TREM | 檢知報告" property="og:title" />
-    <meta content="Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )" property="og:description" />
-    <meta content="https://api-1.exptech.com.tw/file/trem_report.html" property="og:url" />
-    <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/ExpTech.jpg" property="og:image" />
+  <title id="title"></title>
+  <meta charset="utf-8" />
+  <meta content="TREM | 檢知報告" property="og:title" />
+  <meta content="Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )" property="og:description" />
+  <meta content="https://api-1.exptech.com.tw/file/trem_report.html" property="og:url" />
+  <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/ExpTech.jpg" property="og:image" />
+  <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 
-<body style="user-select: none;">
-    <style>
-        table {
-            border-collapse: collapse;
-            border: 2px solid rgb(140 140 140);
-            font-family: sans-serif;
-            font-size: 14px;
-            letter-spacing: 1px;
-        }
-
-        caption {
-            caption-side: bottom;
-            padding: 10px;
-            font-weight: bold;
-        }
-
-        thead {
-            background-color: rgb(228 240 245);
-        }
-
-        th,
-        td {
-            border: 1px solid rgb(160 160 160);
-            padding: 8px 10px;
-            white-space: nowrap;
-            text-align: center;
-        }
-
-        td:last-of-type {
-            text-align: center;
-        }
-
-        tbody>tr:nth-of-type(even) {
-            background-color: rgb(237 238 242);
-        }
-
-        tbody:has(>tr:hover)>tr:not(:hover) {
-            opacity: 0.6;
-        }
-
-        .intensity-1 {
-            color: white;
-            background-color: #003264;
-        }
-
-        .intensity-2 {
-            color: white;
-            background-color: #0064C8;
-        }
-
-        .intensity-3 {
-            color: white;
-            background-color: #1E9632;
-        }
-
-        .intensity-4 {
-            color: black;
-            background-color: #FFC800;
-        }
-
-        .intensity-5 {
-            color: black;
-            background-color: #FF9600;
-        }
-
-        .intensity-6 {
-            color: black;
-            background-color: #FF6400;
-        }
-
-        .intensity-7 {
-            color: white;
-            background-color: #FF0000;
-        }
-
-        .intensity-8 {
-            color: white;
-            background-color: #C00000;
-        }
-
-        .intensity-9 {
-            color: white;
-            background-color: #9600C8;
-        }
-
-        .lpgm-1 {
-            color: white;
-            background-color: #0041ff;
-        }
-
-        .lpgm-2 {
-            color: #333333;
-            background-color: #ffe600;
-        }
-
-        .lpgm-3 {
-            color: white;
-            background-color: #ff2800;
-        }
-
-        .lpgm-4 {
-            color: white;
-            background-color: #a50021;
-        }
-    </style>
-    <div>
-        <div style="color: red;padding: 3px;font-weight: 900;">
-            <a style="font-size: 25px;">僅供參考 實際結果請依 中央氣象署 發布之內容為準</a><br>
-            <a style="font-size: 18px;">下方表格中 若未特別註記 資料來源均為 TREM</a>
-        </div>
-        <div>
-            <input id="checkbox" type="checkbox">
-            <a>Dev Mode</a>
-        </div>
-        <table>
-            <caption>Taiwan Real-time Earthquake Monitoring｜2024｜ExpTech Studio</caption>
-            <thead>
-                <tr>
-                    <th scope="col" colspan="15">TREM EEW</th>
-                </tr>
-                <tr>
-                    <th scope="col" rowspan="2">No.</th>
-                    <th scope="col" rowspan="2">EventID</th>
-                    <th scope="col" rowspan="2">發表單位</th>
-                    <th scope="col" rowspan="2">報數</th>
-
-                    <th scope="col" colspan="11">震源・EEW資訊</th>
-                </tr>
-                <tr>
-                    <th scope="col">檢知時刻</th>
-                    <th scope="col">發震時刻(CWA)</th>
-                    <th scope="col">震央地名</th>
-                    <th scope="col">北緯</th>
-                    <th scope="col">東經</th>
-                    <th scope="col">深度</th>
-                    <th scope="col">規模</th>
-                    <th scope="col">預估最大震度</th>
-                    <th scope="col">實測最大震度(CWA)</th>
-                    <th scope="col">實測最大長周期<br>地震動階級</th>
-                    <th scope="col">RTS</th>
-                </tr>
-            </thead>
-            <tbody id="body">
-            </tbody>
-        </table>
+<body style="display: grid;justify-content: center;text-align: center;">
+  <div style="display: grid;justify-items: center;">
+    <div style="color: red;padding: 3px;font-weight: 900;" class="title">
+      <a style="font-size: 25px;">僅供參考 實際結果請依 中央氣象署 發布之內容為準</a><br>
+      <a style="font-size: 18px;">下方表格中 若未特別註記 資料來源均為 TREM</a>
     </div>
-    <script>
-        let eq_data = [];
-        let trem_data = [];
 
-        const urlSearchParams = new URLSearchParams(window.location.search);
-        const params = Object.fromEntries(urlSearchParams.entries());
+    <table id="month">
+      <tbody>
+      </tbody>
+    </table>
 
-        const checkbox = document.getElementById("checkbox");
-        if (params.dev) checkbox.checked = true
-        checkbox.addEventListener("click", () => {
-            if (checkbox.checked) urlSearchParams.set("dev", true);
-            else urlSearchParams.delete("dev")
-            const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
-            history.replaceState(null, '', newUrl);
-            window.location.reload();
+    <div id="dev_mode">
+      <input id="checkbox" type="checkbox">
+      <a>Dev Mode</a>
+    </div>
+
+    <table class="data">
+      <div class="loading"></div>
+      <caption>Taiwan Real-time Earthquake Monitoring｜2024｜ExpTech Studio</caption>
+      <thead>
+        <tr>
+          <th scope="col" colspan="15">TREM EEW</th>
+        </tr>
+        <tr>
+          <th scope="col" rowspan="2">No.</th>
+          <th scope="col" rowspan="2">EventID</th>
+          <th scope="col" rowspan="2">發表單位</th>
+          <th scope="col" rowspan="2">報數</th>
+          <th scope="col" colspan="11">震源・EEW資訊</th>
+        </tr>
+        <tr>
+          <th scope="col">檢知時刻</th>
+          <th scope="col">發震時刻(CWA)</th>
+          <th scope="col">震央地名</th>
+          <th scope="col">北緯</th>
+          <th scope="col">東經</th>
+          <th scope="col">深度</th>
+          <th scope="col">規模</th>
+          <th scope="col">預估最大震度</th>
+          <th scope="col">實測最大震度(CWA)</th>
+          <th scope="col">實測最大長周期<br>地震動階級</th>
+          <th scope="col">RTS</th>
+        </tr>
+      </thead>
+      <tbody id="body">
+      </tbody>
+    </table>
+  </div>
+  <div id="loading">
+    <div id="loading-spinner">
+      <div class="spinner-circle"></div>
+    </div>
+  </div>
+  <script>
+	let eq_data = [];
+	let trem_data = [];
+	let month_data = [];
+	let current_data = [];
+
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+
+    // dev mode
+    const checkbox = document.getElementById("checkbox");
+    const dev_mode = document.getElementById("dev_mode");
+    if (params.dev) checkbox.checked = true;
+
+    dev_mode.addEventListener("click", () => {
+      checkbox.click();
+      if (checkbox.checked) urlSearchParams.set("dev", true);
+      else urlSearchParams.delete("dev")
+      const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
+      history.replaceState(null, '', newUrl);
+      window.location.reload();
+    });
+
+	async function start() {
+	  showLoading();
+	  await fetchEqData();
+	  await fetchTREMData();
+	  await fetchMonthData();
+
+	  const data = trem_data;
+	  eew_table(data);
+	  hideLoading();
+	  // get month
+	  month_btn();
+	}
+    start();
+
+    function month_btn() {
+      const month_ = document.getElementById('month');
+      let row = document.createElement('tr');
+      let cellCount = 0;
+
+      for (const month of month_data) {
+        const cell = document.createElement('td');
+        const link = document.createElement('a');
+        const day = month['year-month'];
+        link.textContent = `${month['year-month']} (${month.count})`;
+        cell.appendChild(link);
+        row.appendChild(cell);
+
+        cell.addEventListener('click', async () => {
+          if (cell.classList.contains('active')) {
+            return;
+          }
+
+          const clickedCell = cell;
+
+          const activeCells = document.querySelectorAll('.active');
+
+          activeCells.forEach(cell => {
+            cell.classList.remove('active');
+          });
+
+          clickedCell.classList.add('active');
+
+          showLoading();
+          const sp_month_data = await fetchSpecifyMonthData(day);
+          currentPage = 1;
+          eew_table(sp_month_data);
+          hideLoading();
         });
 
-        start();
-
-        async function start() {
-            await fetchEqData();
-            await fetchTREMData();
-
-            let i = 1;
-            for (const trem of trem_data) {
-                const box = document.createElement("tr");
-
-                let eq = null;
-                let hide = false;
-                if (trem.Cwa_id) eq = searchEq(trem.Cwa_id);
-
-                const index = document.createElement("td");
-                index.textContent = i;
-                const link = document.createElement("a")
-                link.href = `https://api-1.exptech.com.tw/file/trem_info.html?id=${trem.ID}&key=${params.key}`;
-                link.target = "_blank";
-                link.textContent = formatTime(Number(trem.ID)).replaceAll("/", "").replaceAll(":", "").replace(" ", "");
-                const id = document.createElement("td");
-                id.append(link);
-                const source = document.createElement("td");
-                source.textContent = `TREM(${trem.Source})`;
-                const serial = document.createElement("td");
-                serial.textContent = trem.Serial;
-                const alert_time = document.createElement("td");
-                alert_time.textContent = formatTime(Number(trem.ID));
-                const eq_time = document.createElement("td");
-                eq_time.textContent = (trem.Cancel) ? "取消" : (trem.False_alarm) ? "誤報" : (trem.False_alarm == null) ? "調查中..." : (eq) ? formatTime(eq.time) : "未知";
-                if (trem.Cancel || trem.False_alarm || trem.False_alarm == null) hide = true
-                if (hide) eq_time.colSpan = 9;
-                const loc = document.createElement("td");
-                loc.textContent = trem.Loc;
-                const lat = document.createElement("td");
-                lat.textContent = (trem.Mag == 1) ? "NSSPE 假設震源參數" : trem.Lat;
-                if (trem.Mag == 1) lat.colSpan = 4;
-                const lon = document.createElement("td");
-                lon.textContent = trem.Lon;
-                const depth = document.createElement("td");
-                depth.textContent = `${Number(trem.Depth)}km`;
-                const mag = document.createElement("td");
-                mag.textContent = `M ${Number(trem.Mag).toFixed(1)}`;
-                const EI = document.createElement("td");
-                EI.textContent = (trem.Max) ? int_to_intensity(trem.Max) : "不明";
-                if (trem.Max) EI.className = `intensity-${trem.Max}`;
-                const AI = document.createElement("td");
-                AI.textContent = (eq) ? int_to_intensity(eq.int) : "未知";
-                if (eq) AI.className = `intensity-${eq.int}`;
-                const lpgm = document.createElement("td");
-                lpgm.textContent = (trem.Lpgm != null) ? trem.Lpgm : "調查中...";
-                if (trem.Lpgm != null) lpgm.className = `lpgm-${trem.Lpgm}`;
-                const alarm = document.createElement("td");
-                alarm.textContent = (trem.Alarm) ? "TRUE" : "";
-
-                box.append(index);
-                box.append(id);
-                box.append(source);
-                box.append(serial);
-                box.append(alert_time);
-                box.append(eq_time);
-                if (!hide) box.append(loc);
-                if (!hide) box.append(lat);
-                if (!hide && trem.Mag != 1) box.append(lon);
-                if (!hide && trem.Mag != 1) box.append(depth);
-                if (!hide && trem.Mag != 1) box.append(mag);
-                if (!hide) box.append(EI);
-                if (!hide) box.append(AI);
-                if (!hide) box.append(lpgm);
-                box.append(alarm);
-
-                if (params.dev || trem.Alarm) document.getElementById("body").appendChild(box);
-                i++;
-            }
+        cellCount++;
+        if (cellCount === 12) {
+          month_.getElementsByTagName('tbody')[0].appendChild(row);
+          row = document.createElement('tr');
+          cellCount = 0;
         }
+      }
 
-        function searchEq(id) {
-            for (const eq of eq_data) {
-                if (eq.id == id) return eq;
-            }
-        }
+      while (cellCount < 12) {
+        const cell = document.createElement('td');
+        row.appendChild(cell);
+        cellCount++;
+      }
 
-        async function fetchEqData() {
-            try {
-                const res = await fetch(`https://api-1.exptech.com.tw/api/v2/eq/report?limit=50&key=${params.key}`);
-                eq_data = await res.json();
-            } catch (err) {
-                console.log(err);
-            }
-        }
+      if (cellCount > 0) {
+        month_.getElementsByTagName('tbody')[0].appendChild(row);
+      }
+    }
 
-        async function fetchTREMData() {
-            try {
-                const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/list?key=${params.key}`);
-                trem_data = await res.json();
-            } catch (err) {
-                console.log(err);
-            }
-        }
+    function showLoading() {
+      document.getElementById("loading").style.display = "block";
+    }
 
-        function formatTime(timestamp) {
-            const date = new Date(timestamp);
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, "0");
-            const day = date.getDate().toString().padStart(2, "0");
-            const hours = date.getHours().toString().padStart(2, "0");
-            const minutes = date.getMinutes().toString().padStart(2, "0");
-            const seconds = date.getSeconds().toString().padStart(2, "0");
+    function hideLoading() {
+      document.getElementById("loading").style.display = "none";
+    }
 
-            return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
-        }
+    function eew_table(data) {
+      let i = 1;
+      document.getElementById("body").innerHTML = '';
+	  current_data = data;
+      for (const trem of data) {
+        const box = document.createElement("tr");
 
-        const intensity_list = ["0", "1", "2", "3", "4", "5弱", "5強", "6弱", "6強", "7"];
+        let eq = null;
+        let hide = false;
+        if (trem.Cwa_id) eq = searchEq(trem.Cwa_id);
 
-        function int_to_intensity(int) {
-            return intensity_list[int];
-        }
-    </script>
+        const index = document.createElement("td");
+        index.textContent = i;
+        const link = document.createElement("a");
+        link.href = `https://api-1.exptech.com.tw/file/trem_info.html?id=${trem.ID}&key=${params.key}`;
+        link.target = "_blank";
+        link.textContent = formatTime(Number(trem.ID)).replaceAll("/", "").replaceAll(":", "").replace(" ", "");
+        const id = document.createElement("td");
+        id.append(link);
+        const source = document.createElement("td");
+        source.textContent = `TREM(${trem.Source})`;
+        const serial = document.createElement("td");
+        serial.textContent = trem.Serial;
+        const alert_time = document.createElement("td");
+        alert_time.textContent = formatTime(Number(trem.ID));
+        const eq_time = document.createElement("td");
+        eq_time.textContent = (trem.Cancel) ? "取消" : (trem.False_alarm) ? "誤報" : (trem.False_alarm == null) ? "調查中..." : (eq) ? formatTime(eq.time) : "未知";
+        if (trem.Cancel || trem.False_alarm || trem.False_alarm == null) hide = true
+        if (hide) eq_time.colSpan = 9;
+        const loc = document.createElement("td");
+        loc.textContent = trem.Loc;
+        const lat = document.createElement("td");
+        lat.textContent = (trem.Mag == 1) ? "NSSPE 假設震源參數" : trem.Lat;
+        if (trem.Mag == 1) lat.colSpan = 4;
+        const lon = document.createElement("td");
+        lon.textContent = trem.Lon;
+        const depth = document.createElement("td");
+        depth.textContent = `${Number(trem.Depth)}km`;
+        const mag = document.createElement("td");
+        mag.textContent = `M ${Number(trem.Mag).toFixed(1)}`;
+        const EI = document.createElement("td");
+        EI.textContent = (trem.Max) ? int_to_intensity(trem.Max) : "不明";
+        if (trem.Max) EI.className = `intensity-${trem.Max}`;
+        const AI = document.createElement("td");
+        AI.textContent = (eq) ? int_to_intensity(eq.int) : "未知";
+        if (eq) AI.className = `intensity-${eq.int}`;
+        const lpgm = document.createElement("td");
+        lpgm.textContent = (trem.Lpgm != null) ? trem.Lpgm : "調查中...";
+        if (trem.Lpgm != null) lpgm.className = `lpgm-${trem.Lpgm}`;
+        const alarm = document.createElement("td");
+        alarm.textContent = (trem.Alarm) ? "TRUE" : "";
+
+        box.append(index);
+        box.append(id);
+        box.append(source);
+        box.append(serial);
+        box.append(alert_time);
+        box.append(eq_time);
+        if (!hide) box.append(loc);
+        if (!hide) box.append(lat);
+        if (!hide && trem.Mag != 1) box.append(lon);
+        if (!hide && trem.Mag != 1) box.append(depth);
+        if (!hide && trem.Mag != 1) box.append(mag);
+        if (!hide) box.append(EI);
+        if (!hide) box.append(AI);
+        if (!hide) box.append(lpgm);
+        box.append(alarm);
+		
+        if (params.dev || trem.Alarm) document.getElementById("body").appendChild(box);
+		i++;
+      }
+    }
+
+    function searchEq(id) {
+      for (const eq of eq_data) {
+        if (eq.id == id) return eq;
+      }
+    }
+
+    async function fetchEqData() {
+      try {
+        const res = await fetch(`https://api-1.exptech.com.tw/api/v2/eq/report?limit=50&key=${params.key}`);
+        eq_data = await res.json();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    async function fetchTREMData() {
+      try {
+        const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/list?key=${params.key}`);
+        trem_data = await res.json();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    async function fetchMonthData() {
+      try {
+        const res = await fetch('https://api-1.exptech.com.tw/api/v1/trem/month');
+        month_data = await res.json();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    async function fetchSpecifyMonthData(d) {
+      try {
+        const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/month/${d}`);
+        return res.json();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    function formatTime(timestamp) {
+      const date = new Date(timestamp);
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      const seconds = date.getSeconds().toString().padStart(2, "0");
+
+      return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    const intensity_list = ["0", "1", "2", "3", "4", "5弱", "5強", "6弱", "6強", "7"];
+
+    function int_to_intensity(int) {
+      return intensity_list[int];
+    }
+  </script>
 </body>
 
 </html>
