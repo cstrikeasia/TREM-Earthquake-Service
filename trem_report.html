@@ -78,7 +78,7 @@
     const checkbox = document.getElementById("checkbox");
     const dev_mode = document.getElementById("dev_mode");
     if (params.dev) checkbox.checked = true;
-	console.log(params.dev);
+	
     dev_mode.addEventListener("click", () => {
       checkbox.click();
       if (checkbox.checked) urlSearchParams.set("dev", true);
@@ -102,9 +102,13 @@
 	  }
 	  
 	  eew_table(data);
-	  hideLoading();
 	  // get month
 	  month_btn();
+
+	  const month_button = document.getElementById(params.time);
+	  if (params.time) month_button.classList.add("active");
+	  
+	  hideLoading();
 	}
     start();
 
@@ -126,6 +130,7 @@
 		if (month) {
 		  const link = document.createElement('a');
 		  const day = month['year-month'];
+		  cell.id = `${month['year-month']}`;
 		  link.textContent = `${month['year-month']} (${month.count})`;
 		  cell.appendChild(link);
 
@@ -143,15 +148,11 @@
 
 			clickedCell.classList.add('active');
 
-			showLoading();
 			const sp_month_data = await fetchSpecifyMonthData(day);
-			console.log(day);
 			urlSearchParams.set("time", day)
 			const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
 			history.replaceState(null, '', newUrl);
 			window.location.reload();
-			
-			hideLoading();
 		  });
 		}
 
