@@ -58,12 +58,19 @@
       <tbody id="body">
       </tbody>
     </table>
-	  <div id="pagination">
-		<button id="prevPage">上一頁</button>
-		<span id="currentPage">-</span>
-		<span>—</span>
-		<span id="totalPages">-</span>
-		<button id="nextPage">下一頁</button>
+	  <div>
+		  <button id="topButton" title="返回頂部">
+			<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 30 30">
+			  <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"></path>
+			</svg>
+		  </button>
+		  <div id="pagination">
+			<button id="prevPage">上一頁</button>
+			<span id="currentPage">-</span>
+			<span>—</span>
+			<span id="totalPages">-</span>
+			<button id="nextPage">下一頁</button>
+		  </div>
 	  </div>
 	</div>
   <div id="loading">
@@ -263,8 +270,8 @@
         if (!hide) box.append(AI);
         if (!hide) box.append(lpgm);
         box.append(alarm);
-
-        document.getElementById("body").appendChild(box);
+		
+        if (params.dev || trem.Alarm) document.getElementById("body").appendChild(box);
       }
 
       // Update current page and total pages
@@ -346,6 +353,25 @@
         eew_table(current_data);
       }
     });
+
+	const topButton = document.getElementById("topButton");
+
+	window.onscroll = function() {scrollFunction()};
+
+	function scrollFunction() {
+	  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+		topButton.style.display = "block";
+	  } else {
+		topButton.style.display = "none";
+	  }
+	}
+
+	topButton.addEventListener("click", function() {
+	  window.scrollTo({
+		top: 0,
+		behavior: "smooth"
+	  });
+	});
   </script>
 </body>
 
