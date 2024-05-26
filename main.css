@@ -340,3 +340,30 @@
     margin: 10px 0;
     color: #007bff;
   }
+
+  #body td {
+    border: 1px solid #c4c4c4;
+  }
+
+  #topButton {
+    display: none;
+    position: fixed;
+    bottom: 26%;
+    right: 60px;
+    z-index: 99;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 50px;
+    transition: background-color 0.3s;
+    width: 45px;
+    height: 45px;
+  }
+
+  #topButton:hover {
+    background-color: #0056b3;
+  }
