@@ -29,7 +29,6 @@
     </div>
 
     <table class="data">
-      <div class="loading"></div>
       <caption>Taiwan Real-time Earthquake Monitoring｜2024｜ExpTech Studio</caption>
       <thead>
         <tr>
@@ -59,17 +58,26 @@
       <tbody id="body">
       </tbody>
     </table>
-  </div>
+	  <div id="pagination">
+		<button id="prevPage">上一頁</button>
+		<span id="currentPage">-</span>
+		<span>—</span>
+		<span id="totalPages">-</span>
+		<button id="nextPage">下一頁</button>
+	  </div>
+	</div>
   <div id="loading">
     <div id="loading-spinner">
       <div class="spinner-circle"></div>
     </div>
   </div>
   <script>
-	let eq_data = [];
-	let trem_data = [];
-	let month_data = [];
-	let current_data = [];
+    let eq_data = [];
+    let trem_data = [];
+    let month_data = [];
+    let current_data = [];
+    let currentPage = 1;
+    const pageSize = 500;
 
     const urlSearchParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlSearchParams.entries());
@@ -88,82 +96,94 @@
       window.location.reload();
     });
 
-	async function start() {
-	  showLoading();
-	  await fetchEqData();
-	  await fetchTREMData();
-	  await fetchMonthData();
+    async function start() {
+      showLoading();
+      await fetchEqData();
+      await fetchTREMData();
+      await fetchMonthData();
 
-	  const data = trem_data;
-	  eew_table(data);
-	  hideLoading();
-	  // get month
-	  month_btn();
-	}
+      let data;
+      if (!params.time) {
+        data = trem_data;
+      } else {
+        data = await fetchSpecifyMonthData(params.time);
+      }
+
+      current_data = data;
+      eew_table(current_data);
+      // get month
+      month_btn();
+
+      const month_button = document.getElementById(params.time);
+      if (params.time) month_button.classList.add("active");
+
+      hideLoading();
+    }
     start();
 
-	function month_btn() {
-	  const month_ = document.getElementById('month');
-	  let row = document.createElement('tr');
-	  let cellCount = 0;
+    function month_btn() {
+      const month_ = document.getElementById('month');
+      let row = document.createElement('tr');
+      let cellCount = 0;
 
-	  const allMonths = Array(12).fill(null);
-	  
-	  month_data.forEach(month => {
-		const [year, monthNumber] = month['year-month'].split('-').map(Number);
-		allMonths[monthNumber - 1] = month;
-	  });
+      const allMonths = Array(12).fill(null);
 
-	  allMonths.forEach((month, index) => {
-		const cell = document.createElement('td');
+      month_data.forEach(month => {
+        const [year, monthNumber] = month['year-month'].split('-').map(Number);
+        allMonths[monthNumber - 1] = month;
+      });
 
-		if (month) {
-		  const link = document.createElement('a');
-		  const day = month['year-month'];
-		  link.textContent = `${month['year-month']} (${month.count})`;
-		  cell.appendChild(link);
+      allMonths.forEach((month, index) => {
+        const cell = document.createElement('td');
 
-		  cell.addEventListener('click', async () => {
-			if (cell.classList.contains('active')) {
-			  return;
-			}
+        if (month) {
+          const link = document.createElement('a');
+          const day = month['year-month'];
+          cell.id = `${month['year-month']}`;
+          link.textContent = `${month['year-month']} (${month.count})`;
+          cell.appendChild(link);
 
-			const clickedCell = cell;
+          cell.addEventListener('click', async () => {
+            if (cell.classList.contains('active')) {
+              return;
+            }
 
-			const activeCells = document.querySelectorAll('.active');
-			activeCells.forEach(cell => {
-			  cell.classList.remove('active');
-			});
+            const clickedCell = cell;
 
-			clickedCell.classList.add('active');
+            const activeCells = document.querySelectorAll('.active');
+            activeCells.forEach(cell => {
+              cell.classList.remove('active');
+            });
 
-			showLoading();
-			const sp_month_data = await fetchSpecifyMonthData(day);
-			currentPage = 1;
-			eew_table(sp_month_data);
-			hideLoading();
-		  });
-		}
+            clickedCell.classList.add('active');
 
-		row.appendChild(cell);
-		cellCount++;
+            const sp_month_data = await fetchSpecifyMonthData(day);
+            urlSearchParams.set("time", day)
+            const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
+            history.replaceState(null, '', newUrl);
+            window.location.reload();
+          });
+        }
 
-		if (cellCount === 12) {
-		  month_.getElementsByTagName('tbody')[0].appendChild(row);
-		  row = document.createElement('tr');
-		  cellCount = 0;
-		}
-	  });
+        row.appendChild(cell);
+        cellCount++;
 
-	  if (cellCount > 0) {
-		while (cellCount < 12) {
-		  const emptyCell = document.createElement('td');
-		  row.appendChild(emptyCell);
-		  cellCount++;
-		}
-		month_.getElementsByTagName('tbody')[0].appendChild(row);
-	  }
-	}
+        if (cellCount === 12) {
+          month_.getElementsByTagName('tbody')[0].appendChild(row);
+          row = document.createElement('tr');
+          cellCount = 0;
+        }
+      });
+
+      if (cellCount > 0) {
+        while (cellCount < 12) {
+          const emptyCell = document.createElement('td');
+          row.appendChild(emptyCell);
+          cellCount++;
+        }
+        month_.getElementsByTagName('tbody')[0].appendChild(row);
+      }
+    }
 
     function showLoading() {
       document.getElementById("loading").style.display = "block";
@@ -174,10 +194,13 @@
     }
 
     function eew_table(data) {
-      let i = 1;
+      const startIndex = (currentPage - 1) * pageSize;
+      const endIndex = Math.min(currentPage * pageSize, data.length);
+
       document.getElementById("body").innerHTML = '';
-	  current_data = data;
-      for (const trem of data) {
+
+      for (let i = startIndex; i < endIndex; i++) {
+        const trem = data[i];
         const box = document.createElement("tr");
 
         let eq = null;
@@ -185,7 +208,7 @@
         if (trem.Cwa_id) eq = searchEq(trem.Cwa_id);
 
         const index = document.createElement("td");
-        index.textContent = i;
+        index.textContent = i + 1;
         const link = document.createElement("a");
         link.href = `https://api-1.exptech.com.tw/file/trem_info.html?id=${trem.ID}&key=${params.key}`;
         link.target = "_blank";
@@ -240,10 +263,13 @@
         if (!hide) box.append(AI);
         if (!hide) box.append(lpgm);
         box.append(alarm);
-		
-        if (params.dev || trem.Alarm) document.getElementById("body").appendChild(box);
-		i++;
+
+        document.getElementById("body").appendChild(box);
       }
+
+      // Update current page and total pages
+      document.getElementById("currentPage").textContent = currentPage;
+      document.getElementById("totalPages").textContent = Math.ceil(data.length / pageSize);
     }
 
     function searchEq(id) {
@@ -305,7 +331,24 @@
     function int_to_intensity(int) {
       return intensity_list[int];
     }
+
+    document.getElementById("prevPage").addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        eew_table(current_data);
+      }
+    });
+
+    document.getElementById("nextPage").addEventListener("click", () => {
+      const maxPage = Math.ceil(current_data.length / pageSize);
+      if (currentPage < maxPage) {
+        currentPage++;
+        eew_table(current_data);
+      }
+    });
   </script>
 </body>
 
 </html>
+
+
