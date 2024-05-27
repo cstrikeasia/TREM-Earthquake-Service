@@ -105,7 +105,7 @@
 
   th,
   td {
-    padding: 12px 15px;
+    padding: 8px 10px;
     text-align: center;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
@@ -303,23 +303,23 @@
   #pagination {
     position: fixed;
     top: 50%;
-    right: 20px;
+    width: 75px;
     transform: translateY(-50%);
     background: #fff;
-    height: auto;
     display: flex;
-    width: auto;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     padding: 20px;
     flex-direction: column;
+    right: -115px;
+    transition: right 0.3s ease;
   }
 
   #pagination button {
     background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 5px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -341,6 +341,10 @@
     color: #007bff;
   }
 
+  #pagination.open {
+    right: 0;
+  }
+
   #body td {
     border: 1px solid #c4c4c4;
   }
@@ -349,7 +353,7 @@
     display: none;
     position: fixed;
     bottom: 26%;
-    right: 60px;
+    right: 35px;
     z-index: 99;
     font-size: 18px;
     border: none;
@@ -366,4 +370,20 @@
 
   #topButton:hover {
     background-color: #0056b3;
+  }
+
+  #openButton {
+    position: fixed;
+    top: 50%;
+    right: 115px;
+    width: 10px;
+    transform: translateY(-50%);
+    background: #007bff;
+    display: flex;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px 0px 0px 10px;
+    padding: 15px;
+    flex-direction: column;
+    cursor: pointer;
+    color: #fff;
   }
