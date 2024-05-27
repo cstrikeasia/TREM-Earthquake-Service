@@ -28,48 +28,53 @@
       <a>Dev Mode</a>
     </div>
 
-    <table class="data">
-      <caption>Taiwan Real-time Earthquake Monitoring｜2024｜ExpTech Studio</caption>
-      <thead>
-        <tr>
-          <th scope="col" colspan="15">TREM EEW</th>
-        </tr>
-        <tr>
-          <th scope="col" rowspan="2">No.</th>
-          <th scope="col" rowspan="2">EventID</th>
-          <th scope="col" rowspan="2">發表單位</th>
-          <th scope="col" rowspan="2">報數</th>
-          <th scope="col" colspan="11">震源・EEW資訊</th>
-        </tr>
-        <tr>
-          <th scope="col">檢知時刻</th>
-          <th scope="col">發震時刻(CWA)</th>
-          <th scope="col">震央地名</th>
-          <th scope="col">北緯</th>
-          <th scope="col">東經</th>
-          <th scope="col">深度</th>
-          <th scope="col">規模</th>
-          <th scope="col">預估最大震度</th>
-          <th scope="col">實測最大震度(CWA)</th>
-          <th scope="col">實測最大長周期<br>地震動階級</th>
-          <th scope="col">RTS</th>
-        </tr>
-      </thead>
-      <tbody id="body">
-      </tbody>
-    </table>
+	  <div class="table-container">
+		  <table class="data">
+			<caption>Taiwan Real-time Earthquake Monitoring｜2024｜ExpTech Studio</caption>
+			<thead>
+			  <tr>
+				<th scope="col" colspan="15">TREM EEW</th>
+			  </tr>
+			  <tr>
+				<th scope="col" rowspan="2">No.</th>
+				<th scope="col" rowspan="2">EventID</th>
+				<th scope="col" rowspan="2">發表單位</th>
+				<th scope="col" rowspan="2">報數</th>
+				<th scope="col" colspan="11">震源・EEW資訊</th>
+			  </tr>
+			  <tr>
+				<th scope="col">檢知時刻</th>
+				<th scope="col">發震時刻(CWA)</th>
+				<th scope="col">震央地名</th>
+				<th scope="col">北緯</th>
+				<th scope="col">東經</th>
+				<th scope="col">深度</th>
+				<th scope="col">規模</th>
+				<th scope="col">預估最大震度</th>
+				<th scope="col">實測最大震度(CWA)</th>
+				<th scope="col">實測最大長周期<br>地震動階級</th>
+				<th scope="col">RTS</th>
+			  </tr>
+			</thead>
+			<tbody id="body">
+			</tbody>
+		  </table>
+	  </div>
 	  <div>
 		  <button id="topButton" title="返回頂部">
 			<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 30 30">
 			  <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"></path>
 			</svg>
 		  </button>
-		  <div id="pagination">
-			<button id="prevPage">上一頁</button>
-			<span id="currentPage">-</span>
-			<span>—</span>
-			<span id="totalPages">-</span>
-			<button id="nextPage">下一頁</button>
+		  <div>
+			  <div id="pagination">
+				<div id="openButton">選擇分頁</div>
+				<button id="prevPage">上一頁</button>
+				<span id="currentPage">-</span>
+				<span>—</span>
+				<span id="totalPages">-</span>
+				<button id="nextPage">下一頁</button>
+			  </div>
 		  </div>
 	  </div>
 	</div>
@@ -128,69 +133,74 @@
     }
     start();
 
-    function month_btn() {
-      const month_ = document.getElementById('month');
-      let row = document.createElement('tr');
-      let cellCount = 0;
+	function month_btn() {
+	  const month_ = document.getElementById('month');
+	  let row = document.createElement('tr');
+	  let cellCount = 0;
 
-      const allMonths = Array(12).fill(null);
+	  const allMonths = Array(12).fill(null);
 
-      month_data.forEach(month => {
-        const [year, monthNumber] = month['year-month'].split('-').map(Number);
-        allMonths[monthNumber - 1] = month;
-      });
+	  month_data.forEach(month => {
+		const [year, monthNumber] = month['year-month'].split('-').map(Number);
+		allMonths[monthNumber - 1] = month;
+	  });
 
-      allMonths.forEach((month, index) => {
-        const cell = document.createElement('td');
+	  allMonths.forEach((month, index) => {
+		const cell = document.createElement('td');
 
-        if (month) {
-          const link = document.createElement('a');
-          const day = month['year-month'];
-          cell.id = `${month['year-month']}`;
-          link.textContent = `${month['year-month']} (${month.count})`;
-          cell.appendChild(link);
+		if (month) {
+		  const link = document.createElement('a');
+		  const day = month['year-month'];
+		  cell.id = `${month['year-month']}`;
+		  link.textContent = `${month['year-month']} (${month.count})`;
+		  cell.appendChild(link);
 
-          cell.addEventListener('click', async () => {
-            if (cell.classList.contains('active')) {
-              return;
-            }
+		  cell.addEventListener('click', async () => {
+			if (cell.classList.contains('active')) {
+			  cell.classList.remove('active');
+			  params.time = '';
+			  const newUrl = `${window.location.pathname}`;
+			  history.replaceState(null, '', newUrl);
+			  window.location.reload();
+			  return;
+			}
 
-            const clickedCell = cell;
+			const clickedCell = cell;
 
-            const activeCells = document.querySelectorAll('.active');
-            activeCells.forEach(cell => {
-              cell.classList.remove('active');
-            });
+			const activeCells = document.querySelectorAll('.active');
+			activeCells.forEach(cell => {
+			  cell.classList.remove('active');
+			});
 
-            clickedCell.classList.add('active');
+			clickedCell.classList.add('active');
 
-            const sp_month_data = await fetchSpecifyMonthData(day);
-            urlSearchParams.set("time", day)
-            const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
-            history.replaceState(null, '', newUrl);
-            window.location.reload();
-          });
-        }
+			const sp_month_data = await fetchSpecifyMonthData(day);
+			urlSearchParams.set("time", day)
+			const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
+			history.replaceState(null, '', newUrl);
+			window.location.reload();
+		  });
+		}
 
-        row.appendChild(cell);
-        cellCount++;
+		row.appendChild(cell);
+		cellCount++;
 
-        if (cellCount === 12) {
-          month_.getElementsByTagName('tbody')[0].appendChild(row);
-          row = document.createElement('tr');
-          cellCount = 0;
-        }
-      });
+		if (cellCount === 12) {
+		  month_.getElementsByTagName('tbody')[0].appendChild(row);
+		  row = document.createElement('tr');
+		  cellCount = 0;
+		}
+	  });
 
-      if (cellCount > 0) {
-        while (cellCount < 12) {
-          const emptyCell = document.createElement('td');
-          row.appendChild(emptyCell);
-          cellCount++;
-        }
-        month_.getElementsByTagName('tbody')[0].appendChild(row);
-      }
-    }
+	  if (cellCount > 0) {
+		while (cellCount < 12) {
+		  const emptyCell = document.createElement('td');
+		  row.appendChild(emptyCell);
+		  cellCount++;
+		}
+		month_.getElementsByTagName('tbody')[0].appendChild(row);
+	  }
+	}
 
     function showLoading() {
       document.getElementById("loading").style.display = "block";
@@ -371,6 +381,15 @@
 		top: 0,
 		behavior: "smooth"
 	  });
+	});
+	
+	document.getElementById('openButton').addEventListener('click', function() {
+		var menu = document.getElementById('pagination');
+		if (menu.classList.contains('open')) {
+			menu.classList.remove('open');
+		} else {
+			menu.classList.add('open');
+		}
 	});
   </script>
 </body>
