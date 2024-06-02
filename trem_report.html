@@ -60,22 +60,30 @@
 			</tbody>
 		  </table>
 	  </div>
-	  <div>
+	  <div class="tool_tip">
 		  <button id="topButton" title="返回頂部">
-			<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 30 30">
-			  <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"></path>
-			</svg>
+			  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 30 30">
+				  <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"></path>
+			  </svg>
 		  </button>
-		  <div>
+			<div>
 			  <div id="pagination">
-				<div id="openButton">選擇分頁</div>
-				<button id="prevPage">上一頁</button>
-				<span id="currentPage">-</span>
-				<span>—</span>
-				<span id="totalPages">-</span>
-				<button id="nextPage">下一頁</button>
+				  <div id="filterContainer">
+					  <label for="magnitudeFilter">篩選預估最大震度</label>
+					  <select id="magnitudeFilter">
+						  <option value="">全部</option>
+					  </select>
+				  </div>
+				  <div style="display: contents;">
+					  <div id="openButton">選擇分頁</div>
+					  <button id="prevPage">上一頁</button>
+					  <span id="currentPage">-</span>
+					  <span>—</span>
+					  <span id="totalPages">-</span>
+					  <button id="nextPage">下一頁</button>
+				  </div>
 			  </div>
-		  </div>
+			</div>
 	  </div>
 	</div>
   <div id="loading">
@@ -88,6 +96,7 @@
     let trem_data = [];
     let month_data = [];
     let current_data = [];
+    let Ints = [];
     let currentPage = 1;
     const pageSize = 500;
 
@@ -120,6 +129,12 @@
       } else {
         data = await fetchSpecifyMonthData(params.time);
       }
+		
+      data.forEach(Int => {
+        Ints.push(Int.Max);
+      });
+	  
+      populateMagnitudeFilter(Ints);
 
       current_data = data;
       eew_table(current_data);
@@ -240,7 +255,7 @@
         alert_time.textContent = formatTime(Number(trem.ID));
         const eq_time = document.createElement("td");
         eq_time.textContent = (trem.Cancel) ? "取消" : (trem.False_alarm) ? "誤報" : (trem.False_alarm == null) ? "調查中..." : (eq) ? formatTime(eq.time) : "未知";
-        if (trem.Cancel || trem.False_alarm || trem.False_alarm == null) hide = true
+        if (trem.Cancel || trem.False_alarm || trem.False_alarm == null) hide = true;
         if (hide) eq_time.colSpan = 9;
         const loc = document.createElement("td");
         loc.textContent = trem.Loc;
@@ -284,11 +299,41 @@
         if (params.dev || trem.Alarm) document.getElementById("body").appendChild(box);
       }
 
-      // Update current page and total pages
       document.getElementById("currentPage").textContent = currentPage;
       document.getElementById("totalPages").textContent = Math.ceil(data.length / pageSize);
     }
 
+	function populateMagnitudeFilter(data) {
+		const magnitudeFilter = document.getElementById('magnitudeFilter');
+		const uniqueMagnitudes = new Set();
+		
+		data.forEach(item => {
+			if (!isNaN(item)) {
+				uniqueMagnitudes.add(int_to_intensity(item));
+			}
+		});
+
+		// 轉換為數組並排序
+		const sortedMagnitudes = Array.from(uniqueMagnitudes).sort((a, b) => {
+			// 如果 a 和 b 都是數字，則將它們轉換為數字並比較
+			const numA = parseInt(a);
+			const numB = parseInt(b);
+			if (!isNaN(numA) && !isNaN(numB)) {
+				return numA - numB;
+			} else {
+				// 否則，將兩者視為字符串進行比較
+				return a.localeCompare(b);
+			}
+		});
+
+		sortedMagnitudes.forEach(ints => {
+			const option = document.createElement('option');
+			option.value = ints;
+			option.textContent = ints;
+			magnitudeFilter.appendChild(option);
+		});
+	}
+	
     function searchEq(id) {
       for (const eq of eq_data) {
         if (eq.id == id) return eq;
@@ -391,6 +436,22 @@
 			menu.classList.add('open');
 		}
 	});
+	
+	document.getElementById('magnitudeFilter').addEventListener('change', function() {
+		filterAndDisplayData();
+	});
+
+	function filterAndDisplayData() {
+		const magnitudeFilter = document.getElementById('magnitudeFilter').value;
+		let filteredData = current_data;
+
+		if (magnitudeFilter) {
+			filteredData = current_data.filter(item => int_to_intensity(item.Max) === magnitudeFilter);
+		}
+
+		eew_table(filteredData);
+	}
+
   </script>
 </body>
 
