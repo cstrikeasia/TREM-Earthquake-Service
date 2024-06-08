@@ -1,15 +1,20 @@
+<!DOCTYPE html>
 <html lang="zh-Hant">
 
 <head>
-    <title id="title">TREM SDMS</title>
-    <meta charset="utf-8" />
-    <meta content="TREM SDMS" property="og:title" />
-    <meta content="Seismic Data Management System | 地震資料管理系統" property="og:description" />
-    <meta content="https://exptechtw.github.io/" property="og:url" />
-    <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/image/Icon/ExpTech.png" property="og:image" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TREM SDMS</title>
+    <meta content="TREM SDMS" property="og:title">
+    <meta content="Seismic Data Management System | 地震資料管理系統" property="og:description">
+    <meta content="https://exptechtw.github.io/" property="og:url">
+    <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/image/Icon/ExpTech.png" property="og:image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="./css/SDMS.css">
 </head>
 
-<body style="background-color: #333439;">
+<body style="background-color: #f4f4f4; font-family: 'Roboto', sans-serif;">
     <div class="main">
         <div class="body">
             <div class="title">Seismic Data Management System</div>
@@ -36,253 +41,14 @@
                 </div>
             </div>
             <div class="button_box">
-                <button class="button_text" id="button" type="button" onclick="download()">下載</button>
+                <button class="button_text" id="button" type="button" onclick="download()"><i
+                        class="fas fa-download"></i> 下載</button>
             </div>
         </div>
     </div>
-
-    <style>
-        .main {
-            width: 100%;
-            height: 100%;
-            align-items: center;
-            display: grid;
-            justify-items: center;
-            color: white;
-        }
-
-        .body {
-            text-align: center;
-            padding: 4%;
-            border: 3px solid black;
-            border-radius: 5px;
-            background-color: #535353;
-        }
-
-        .title {
-            font-size: 28px;
-            font-weight: 900;
-        }
-
-        .subtitle {
-            font-size: 26px;
-            font-weight: 600;
-        }
-
-        .stations_box {
-            padding: 2%;
-        }
-
-        .stations_title {
-            font-size: 20px;
-            font-weight: 900;
-        }
-
-        .stations_text {
-            border-radius: 5px;
-            text-align: center;
-            color: white;
-            background-color: #333439;
-            border: 1px solid black;
-            outline: none;
-        }
-
-        .time {
-            display: flex;
-        }
-
-        .start_box {
-            padding: 1%;
-            width: 50%;
-        }
-
-        .start_title {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .start_text {
-            border-radius: 5px;
-            width: 80%;
-            text-align: center;
-            color: white;
-            background-color: #333439;
-            border: 1px solid black;
-            outline: none;
-        }
-
-        .end_box {
-            padding: 1%;
-            width: 50%;
-        }
-
-        .end_title {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .end_text {
-            border-radius: 5px;
-            width: 80%;
-            text-align: center;
-            color: white;
-            background-color: #333439;
-            border: 1px solid black;
-            outline: none;
-        }
-
-        .button_box {
-            padding: 1%;
-            align-items: center;
-        }
-
-        .button_text {
-            color: white;
-            background-color: #333439;
-            border-radius: 5px;
-            font-size: 16px;
-            margin: 2%;
-            padding: 1%;
-            width: 60%;
-        }
-    </style>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0/axios.min.js"></script>
-    <script>
-        const utc = new Date();
-        const NOW = new Date(utc.getTime() + utc.getTimezoneOffset() * 60 * 1000 + 3600 * 8 * 1000);
-        const Now = formatTime(NOW.getTime() - 325000);
-        const Now1 = formatTime(NOW.getTime() - 25000);
-
-        const _stations = document.getElementById("stations");
-        const _button = document.getElementById("button");
-        const _start = document.getElementById("start");
-        const _end = document.getElementById("end");
-        _start.value = Now;
-        _end.value = Now1;
-        let station_data;
-        let region;
-        axios.get("https://raw.githubusercontent.com/ExpTechTW/API/master/resource/region.json")
-            .then((res) => {
-                region = res.data;
-                axios.get("https://raw.githubusercontent.com/ExpTechTW/API/master/resource/station.json")
-                    .then((res) => {
-                        station_data = res.data;
-                        _stations.innerHTML = "";
-                        for (const id of Object.keys(station_data)) {
-                            if (station_data[id].net == "SE-Net") continue;
-                            const opt_station = document.createElement("option");
-                            opt_station.value = id;
-                            opt_station.innerHTML = `${id} | ${loc_code_to_string(station_data[id].info[station_data[id].info.length - 1].code)}`;
-                            _stations.appendChild(opt_station);
-                        }
-                    });
-            });
-
-        const Network = document.getElementById("Network");
-        Network.onchange = () => {
-            _stations.innerHTML = "";
-            for (const id of Object.keys(station_data)) {
-                if ((Network.value == "MS" && station_data[id].net == "SE-Net") || (Network.value == "SE" && station_data[id].net == "MS-Net")) continue;
-                const opt_station = document.createElement("option");
-                opt_station.value = id;
-                opt_station.innerHTML = `${id} | ${loc_code_to_string(station_data[id].info[station_data[id].info.length - 1].code)}`;
-                _stations.appendChild(opt_station);
-            }
-        };
-
-        function loc_code_to_string(code) {
-            for (const city of Object.keys(region)) {
-                for (const town of Object.keys(region[city])) {
-                    if (region[city][town].code == code) return `${city} ${town}`;
-                }
-            }
-            return "未知區域";
-        }
-
-        function download() {
-            _button.disabled = true;
-            _button.textContent = "正在準備檔案...";
-            _stations.disabled = true;
-            _start.disabled = true;
-            _end.disabled = true;
-            Network.disabled = true;
-
-            const data = {
-                start: _start.value,
-                end: _end.value,
-                id: _stations.value,
-            }
-
-            fetch("https://api.exptech.com.tw/api/v1/trem/wave", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-            }).then(res => {
-                return res.json();
-            }).then(data => {
-                if (data.success) {
-                    file(data.msg);
-                    console.log('Success');
-                } else {
-                    exit();
-                    const res = data.msg;
-                    if (res == "Time invalid") alert("無效時間!");
-                    else if (res == "Station info not found") alert("未發現 該測站資訊!");
-                    else if (res == "End time error") alert("結束時間 錯誤!");
-                    else if (res == "Time error") alert("起始時間 錯誤!");
-                    else if (res == "Time too long") alert("選取時間段過長!");
-                    else if (res == "Server busy") alert("伺服器繁忙 請稍後再試!");
-                    else if (res == "No data found") alert("指定條件 查無資料!");
-                    else if (res == "Failed to write file") alert("未知錯誤 請聯絡 開發人員!");
-                    console.log(`Error: ${res}`);
-                }
-            }).catch(err => {
-                console.log("Error: ", err.message);
-                exit();
-            });
-        }
-
-        function formatTime(timestamp) {
-            const date = new Date(timestamp);
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, "0");
-            const day = date.getDate().toString().padStart(2, "0");
-            const hours = date.getHours().toString().padStart(2, "0");
-            const minutes = date.getMinutes().toString().padStart(2, "0");
-            const seconds = date.getSeconds().toString().padStart(2, "0");
-
-            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        }
-
-        function file(file) {
-            axios({
-                url: `https://api.exptech.com.tw/file/download/${file}.zip`,
-                method: "GET",
-                responseType: "blob",
-            }).then((res) => {
-                const link = document.createElement("a");
-                link.href = window.URL.createObjectURL(new Blob([res.data]));
-                link.setAttribute("download", `${file}.zip`);
-                document.body.appendChild(link);
-                link.click();
-                exit();
-            }).catch((err) => {
-                console.log(err);
-                exit();
-                alert("下載 錯誤!");
-            });
-        }
-
-        function exit() {
-            _button.textContent = "下載";
-            _stations.disabled = false;
-            _start.disabled = false;
-            _end.disabled = false;
-            _button.disabled = false;
-            Network.disabled = false;
-        }
-    </script>
+    <script src="./JS/SDMS.js"></script>
 </body>
 
 </html>
