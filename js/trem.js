@@ -191,13 +191,12 @@ setInterval(() => ntp(), 60000);
 setInterval(() => {
   if (!lock) {
     timeline.value = 86400 - (!time ? 0 : (Now().getTime() - time) / 1000);
-    t.textContent = `${time_string(!time ? Now().getTime() : time)} (${
-      t.style.color == "yellow"
-        ? "重播"
-        : t.style.color == "red"
+    t.textContent = `${time_string(!time ? Now().getTime() : time)} (${t.style.color == "yellow"
+      ? "重播"
+      : t.style.color == "red"
         ? "暫停"
         : "即時"
-    })`;
+      })`;
   }
   if (!state) return;
   if (time) time += 1000;
