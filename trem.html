@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="zh-Hant">
 
 <head>
@@ -9,26 +10,121 @@
     <meta content="https://exptechtw.github.io/" property="og:url" />
     <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/image/Icon/ExpTech.png" property="og:image" />
     <link rel="stylesheet" href="./trem.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        .map-wrapper {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .control-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #87cefa;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #6495ed;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #color-switch {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .dark {
+            background-color: #000;
+        }
+
+        .light {
+            background-color: #f5f5f5;
+        }
+
+        .dark button,
+        .dark #time,
+        .dark .title {
+            color: #fff;
+        }
+
+        .light button {
+            color: #000;
+        }
+
+        .light .control a:last-child {
+            color: #009dff !important;
+        }
+    </style>
 </head>
 
-<body>
+<body class="dark">
     <div class="app-container">
-        <div>
-            <div class="title">TREM 強震監視器</div>
-            <div style="color:#f08080">僅供參考 最終結果依 <b>中央氣象署(CWA)</b> 為準</div>
-        </div>
+        <div class="title">TREM 強震監視器</div>
+        <div style="color:#f08080;margin-bottom:20px;">僅供參考 最終結果依 <b>中央氣象署(CWA)</b> 為準</div>
         <canvas id="canvas" style="display: none;"></canvas>
         <div class="container">
             <div class="map-wrapper">
-                <div class="map-container"><img
-                        src="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/taiwan.png"
-                        class="map-image"><img src="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/rts.png"
-                        id="img" class="map-image"><img
-                        src="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/int.png" class="map-image"></div>
+                <div class="map-container">
+                    <img src="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/taiwan.png" class="map-image">
+                    <img src="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/rts.png" id="img"
+                        class="map-image">
+                    <img src="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/int.png" class="map-image">
+                </div>
             </div>
             <div class="control-container">
                 <div id="eew-info">
-                    <div style="display:flex">
+                    <div style="display:flex;margin-bottom:10px;">
                         <div class="text-box">
                             <div class="text-title" id="eew-time"></div>
                         </div>
@@ -41,7 +137,7 @@
                             <div class="text-title" id="eew-loc"></div>
                         </div>
                     </div>
-                    <div style="display:flex">
+                    <div style="display:flex;">
                         <div class="text-box">
                             <div class="text-title">M</div>
                             <div class="text-body" id="eew-scale"></div>
@@ -56,20 +152,43 @@
                         </div>
                     </div>
                 </div>
-                <div class="control"><a id="time" class="subtitle">---- / -- / -- -- : -- : --</a>
-                    <div><input id="timeline" type="range" min="0" max="86400" step="1" value="86400"></div>
-                    <div><button id="last" disabled="disabled">最新</button> <button id="switch">暫停</button> <button
-                            id="audio">開啟音效</button></div><a style="color:#87cefa;padding:5px"
-                        href="https://api.exptech.com.tw/file/trem_more.html">更多資訊 >></a>
+                <div class="control">
+                    <a id="time" class="subtitle">---- / -- / -- -- : -- : --</a>
+                    <div style="margin-top:10px;">
+                        <input id="timeline" type="range" min="0" max="86400" step="1" value="86400">
+                    </div>
+                    <div>
+                        <button id="last" disabled="disabled">最新</button>
+                        <button id="switch">暫停</button>
+                        <button id="audio">開啟音效</button>
+                    </div>
+                    <a style="color:#87cefa;padding:5px;" href="https://api.exptech.com.tw/file/trem_more.html">更多資訊
+                        >></a>
                 </div>
             </div>
-        </div><audio id="audio_warn">
+        </div>
+        <audio id="audio_warn">
             <source src="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/warn.mp3" type="audio/mpeg">
-        </audio><audio id="audio_alert">
+        </audio>
+        <audio id="audio_alert">
             <source src="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/alert.mp3" type="audio/mpeg">
         </audio>
+        <button id="color-switch" onclick="switchColor()">切換背景色</button>
     </div>
     <script src="./trem.js"></script>
+    <script>
+        function switchColor() {
+            const body = document.querySelector('body');
+            if (body.classList.contains('light')) {
+                body.classList.remove('light');
+                body.classList.add('dark');
+            } else {
+                body.classList.remove('dark');
+                body.classList.add('light');
+            }
+        }
+
+    </script>
 </body>
 
 </html>
