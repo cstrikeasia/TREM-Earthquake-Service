@@ -8,7 +8,7 @@
   <meta content="Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )" property="og:description" />
   <meta content="https://api-1.exptech.com.tw/file/trem_report.html" property="og:url" />
   <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/ExpTech.jpg" property="og:image" />
-  <link rel="stylesheet" type="text/css" href="main.css">
+  <link rel="stylesheet" type="text/css" href="./css/trem_report.css">
 </head>
 
 <body style="display: grid;text-align: center;">
@@ -28,372 +28,73 @@
       <a>Dev Mode</a>
     </div>
 
-	  <div class="table-container">
-		  <table class="data">
-			<caption>Taiwan Real-time Earthquake Monitoring｜2024｜ExpTech Studio</caption>
-			<thead>
-			  <tr>
-				<th scope="col" colspan="15">TREM EEW</th>
-			  </tr>
-			  <tr>
-				<th scope="col" rowspan="2">No.</th>
-				<th scope="col" rowspan="2">EventID</th>
-				<th scope="col" rowspan="2">發表單位</th>
-				<th scope="col" rowspan="2">報數</th>
-				<th scope="col" colspan="11">震源・EEW資訊</th>
-			  </tr>
-			  <tr>
-				<th scope="col">檢知時刻</th>
-				<th scope="col">發震時刻(CWA)</th>
-				<th scope="col">震央地名</th>
-				<th scope="col">北緯</th>
-				<th scope="col">東經</th>
-				<th scope="col">深度</th>
-				<th scope="col">規模</th>
-				<th scope="col">預估最大震度</th>
-				<th scope="col">實測最大震度(CWA)</th>
-				<th scope="col">實測最大長周期<br>地震動階級</th>
-				<th scope="col">RTS</th>
-			  </tr>
-			</thead>
-			<tbody id="body">
-			</tbody>
-		  </table>
-	  </div>
-	  <div>
-		  <button id="topButton" title="返回頂部">
-			<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 30 30">
-			  <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"></path>
-			</svg>
-		  </button>
-		  <div>
-			  <div id="pagination">
-				<div id="openButton">選擇分頁</div>
-				<button id="prevPage">上一頁</button>
-				<span id="currentPage">-</span>
-				<span>—</span>
-				<span id="totalPages">-</span>
-				<button id="nextPage">下一頁</button>
-			  </div>
-		  </div>
-	  </div>
-	</div>
+    <div class="table-container">
+      <table class="data">
+        <caption>Taiwan Real-time Earthquake Monitoring｜2024｜ExpTech Studio</caption>
+        <thead>
+          <tr>
+            <th scope="col" colspan="15">TREM EEW</th>
+          </tr>
+          <tr>
+            <th scope="col" rowspan="2">No.</th>
+            <th scope="col" rowspan="2">EventID</th>
+            <th scope="col" rowspan="2">發表單位</th>
+            <th scope="col" rowspan="2">報數</th>
+            <th scope="col" colspan="11">震源・EEW資訊</th>
+          </tr>
+          <tr>
+            <th scope="col">檢知時刻</th>
+            <th scope="col">發震時刻(CWA)</th>
+            <th scope="col">震央地名</th>
+            <th scope="col">北緯</th>
+            <th scope="col">東經</th>
+            <th scope="col">深度</th>
+            <th scope="col">規模</th>
+            <th scope="col">預估最大震度</th>
+            <th scope="col">實測最大震度(CWA)</th>
+            <th scope="col">實測最大長周期<br>地震動階級</th>
+            <th scope="col">RTS</th>
+          </tr>
+        </thead>
+        <tbody id="body">
+        </tbody>
+      </table>
+    </div>
+    <div class="tool_tip">
+      <button id="topButton" title="返回頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-up-fill"
+          viewBox="0 0 30 30">
+          <path
+            d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z">
+          </path>
+        </svg>
+      </button>
+      <div>
+        <div id="pagination">
+          <div id="filterContainer">
+            <label for="magnitudeFilter">篩選預估最大震度</label>
+            <select id="magnitudeFilter">
+              <option value="">全部</option>
+            </select>
+          </div>
+          <div style="display: contents;">
+            <div id="openButton">選擇分頁</div>
+            <button id="prevPage">上一頁</button>
+            <span id="currentPage">-</span>
+            <span>—</span>
+            <span id="totalPages">-</span>
+            <button id="nextPage">下一頁</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div id="loading">
     <div id="loading-spinner">
       <div class="spinner-circle"></div>
     </div>
   </div>
-  <script>
-    let eq_data = [];
-    let trem_data = [];
-    let month_data = [];
-    let current_data = [];
-    let currentPage = 1;
-    const pageSize = 500;
-
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const params = Object.fromEntries(urlSearchParams.entries());
-
-    // dev mode
-    const checkbox = document.getElementById("checkbox");
-    const dev_mode = document.getElementById("dev_mode");
-    if (params.dev) checkbox.checked = true;
-
-    dev_mode.addEventListener("click", () => {
-      checkbox.click();
-      if (checkbox.checked) urlSearchParams.set("dev", true);
-      else urlSearchParams.delete("dev")
-      const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
-      history.replaceState(null, '', newUrl);
-      window.location.reload();
-    });
-
-    async function start() {
-      showLoading();
-      await fetchEqData();
-      await fetchTREMData();
-      await fetchMonthData();
-
-      let data;
-      if (!params.time) {
-        data = trem_data;
-      } else {
-        data = await fetchSpecifyMonthData(params.time);
-      }
-
-      current_data = data;
-      eew_table(current_data);
-      // get month
-      month_btn();
-
-      const month_button = document.getElementById(params.time);
-      if (params.time) month_button.classList.add("active");
-
-      hideLoading();
-    }
-    start();
-
-	function month_btn() {
-	  const month_ = document.getElementById('month');
-	  let row = document.createElement('tr');
-	  let cellCount = 0;
-
-	  const allMonths = Array(12).fill(null);
-
-	  month_data.forEach(month => {
-		const [year, monthNumber] = month['year-month'].split('-').map(Number);
-		allMonths[monthNumber - 1] = month;
-	  });
-
-	  allMonths.forEach((month, index) => {
-		const cell = document.createElement('td');
-
-		if (month) {
-		  const link = document.createElement('a');
-		  const day = month['year-month'];
-		  cell.id = `${month['year-month']}`;
-		  link.textContent = `${month['year-month']} (${month.count})`;
-		  cell.appendChild(link);
-
-		  cell.addEventListener('click', async () => {
-			if (cell.classList.contains('active')) {
-			  cell.classList.remove('active');
-			  params.time = '';
-			  const newUrl = `${window.location.pathname}`;
-			  history.replaceState(null, '', newUrl);
-			  window.location.reload();
-			  return;
-			}
-
-			const clickedCell = cell;
-
-			const activeCells = document.querySelectorAll('.active');
-			activeCells.forEach(cell => {
-			  cell.classList.remove('active');
-			});
-
-			clickedCell.classList.add('active');
-
-			const sp_month_data = await fetchSpecifyMonthData(day);
-			urlSearchParams.set("time", day)
-			const newUrl = `${window.location.pathname}?${urlSearchParams.toString()}`;
-			history.replaceState(null, '', newUrl);
-			window.location.reload();
-		  });
-		}
-
-		row.appendChild(cell);
-		cellCount++;
-
-		if (cellCount === 12) {
-		  month_.getElementsByTagName('tbody')[0].appendChild(row);
-		  row = document.createElement('tr');
-		  cellCount = 0;
-		}
-	  });
-
-	  if (cellCount > 0) {
-		while (cellCount < 12) {
-		  const emptyCell = document.createElement('td');
-		  row.appendChild(emptyCell);
-		  cellCount++;
-		}
-		month_.getElementsByTagName('tbody')[0].appendChild(row);
-	  }
-	}
-
-    function showLoading() {
-      document.getElementById("loading").style.display = "block";
-    }
-
-    function hideLoading() {
-      document.getElementById("loading").style.display = "none";
-    }
-
-    function eew_table(data) {
-      const startIndex = (currentPage - 1) * pageSize;
-      const endIndex = Math.min(currentPage * pageSize, data.length);
-
-      document.getElementById("body").innerHTML = '';
-
-      for (let i = startIndex; i < endIndex; i++) {
-        const trem = data[i];
-        const box = document.createElement("tr");
-
-        let eq = null;
-        let hide = false;
-        if (trem.Cwa_id) eq = searchEq(trem.Cwa_id);
-
-        const index = document.createElement("td");
-        index.textContent = i + 1;
-        const link = document.createElement("a");
-        link.href = `https://api-1.exptech.com.tw/file/trem_info.html?id=${trem.ID}&key=${params.key}`;
-        link.target = "_blank";
-        link.textContent = formatTime(Number(trem.ID)).replaceAll("/", "").replaceAll(":", "").replace(" ", "");
-        const id = document.createElement("td");
-        id.append(link);
-        const source = document.createElement("td");
-        source.textContent = `TREM(${trem.Source})`;
-        const serial = document.createElement("td");
-        serial.textContent = trem.Serial;
-        const alert_time = document.createElement("td");
-        alert_time.textContent = formatTime(Number(trem.ID));
-        const eq_time = document.createElement("td");
-        eq_time.textContent = (trem.Cancel) ? "取消" : (trem.False_alarm) ? "誤報" : (trem.False_alarm == null) ? "調查中..." : (eq) ? formatTime(eq.time) : "未知";
-        if (trem.Cancel || trem.False_alarm || trem.False_alarm == null) hide = true
-        if (hide) eq_time.colSpan = 9;
-        const loc = document.createElement("td");
-        loc.textContent = trem.Loc;
-        const lat = document.createElement("td");
-        lat.textContent = (trem.Mag == 1) ? "NSSPE 假設震源參數" : trem.Lat;
-        if (trem.Mag == 1) lat.colSpan = 4;
-        const lon = document.createElement("td");
-        lon.textContent = trem.Lon;
-        const depth = document.createElement("td");
-        depth.textContent = `${Number(trem.Depth)}km`;
-        const mag = document.createElement("td");
-        mag.textContent = `M ${Number(trem.Mag).toFixed(1)}`;
-        const EI = document.createElement("td");
-        EI.textContent = (trem.Max) ? int_to_intensity(trem.Max) : "不明";
-        if (trem.Max) EI.className = `intensity-${trem.Max}`;
-        const AI = document.createElement("td");
-        AI.textContent = (eq) ? int_to_intensity(eq.int) : "未知";
-        if (eq) AI.className = `intensity-${eq.int}`;
-        const lpgm = document.createElement("td");
-        lpgm.textContent = (trem.Lpgm != null) ? trem.Lpgm : "調查中...";
-        if (trem.Lpgm != null) lpgm.className = `lpgm-${trem.Lpgm}`;
-        const alarm = document.createElement("td");
-        alarm.textContent = (trem.Alarm) ? "TRUE" : "";
-
-        box.append(index);
-        box.append(id);
-        box.append(source);
-        box.append(serial);
-        box.append(alert_time);
-        box.append(eq_time);
-        if (!hide) box.append(loc);
-        if (!hide) box.append(lat);
-        if (!hide && trem.Mag != 1) box.append(lon);
-        if (!hide && trem.Mag != 1) box.append(depth);
-        if (!hide && trem.Mag != 1) box.append(mag);
-        if (!hide) box.append(EI);
-        if (!hide) box.append(AI);
-        if (!hide) box.append(lpgm);
-        box.append(alarm);
-		
-        if (params.dev || trem.Alarm) document.getElementById("body").appendChild(box);
-      }
-
-      // Update current page and total pages
-      document.getElementById("currentPage").textContent = currentPage;
-      document.getElementById("totalPages").textContent = Math.ceil(data.length / pageSize);
-    }
-
-    function searchEq(id) {
-      for (const eq of eq_data) {
-        if (eq.id == id) return eq;
-      }
-    }
-
-    async function fetchEqData() {
-      try {
-        const res = await fetch(`https://api-1.exptech.com.tw/api/v2/eq/report?limit=50&key=${params.key}`);
-        eq_data = await res.json();
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    async function fetchTREMData() {
-      try {
-        const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/list?key=${params.key}`);
-        trem_data = await res.json();
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    async function fetchMonthData() {
-      try {
-        const res = await fetch('https://api-1.exptech.com.tw/api/v1/trem/month');
-        month_data = await res.json();
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    async function fetchSpecifyMonthData(d) {
-      try {
-        const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/month/${d}`);
-        return res.json();
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    function formatTime(timestamp) {
-      const date = new Date(timestamp);
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1).toString().padStart(2, "0");
-      const day = date.getDate().toString().padStart(2, "0");
-      const hours = date.getHours().toString().padStart(2, "0");
-      const minutes = date.getMinutes().toString().padStart(2, "0");
-      const seconds = date.getSeconds().toString().padStart(2, "0");
-
-      return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
-    }
-
-    const intensity_list = ["0", "1", "2", "3", "4", "5弱", "5強", "6弱", "6強", "7"];
-
-    function int_to_intensity(int) {
-      return intensity_list[int];
-    }
-
-    document.getElementById("prevPage").addEventListener("click", () => {
-      if (currentPage > 1) {
-        currentPage--;
-        eew_table(current_data);
-      }
-    });
-
-    document.getElementById("nextPage").addEventListener("click", () => {
-      const maxPage = Math.ceil(current_data.length / pageSize);
-      if (currentPage < maxPage) {
-        currentPage++;
-        eew_table(current_data);
-      }
-    });
-
-	const topButton = document.getElementById("topButton");
-
-	window.onscroll = function() {scrollFunction()};
-
-	function scrollFunction() {
-	  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-		topButton.style.display = "block";
-	  } else {
-		topButton.style.display = "none";
-	  }
-	}
-
-	topButton.addEventListener("click", function() {
-	  window.scrollTo({
-		top: 0,
-		behavior: "smooth"
-	  });
-	});
-	
-	document.getElementById('openButton').addEventListener('click', function() {
-		var menu = document.getElementById('pagination');
-		if (menu.classList.contains('open')) {
-			menu.classList.remove('open');
-		} else {
-			menu.classList.add('open');
-		}
-	});
-  </script>
+  <script src="./js/trem_report.js"></script>
 </body>
 
 </html>
-
-

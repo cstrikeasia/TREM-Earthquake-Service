@@ -393,3 +393,43 @@
     cursor: pointer;
     color: #fff;
   }
+  
+  #filterContainer {
+    position: fixed;
+    bottom: 80%;
+    right: 0%;
+    transform: translateY(-50%);
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: right 0.3s ease;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    width: auto;
+  }
+  
+  #filterContainer label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  #filterContainer select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #f9f9f9;
+    color: #333;
+    font-size: 14px;
+  }
+
+  #filterContainer select:focus {
+    outline: none;
+    border-color: #007bff;
+    background: #fff;
+  }
