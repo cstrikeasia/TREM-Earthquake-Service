@@ -135,7 +135,7 @@ $(document).ready(function () {
       const timer = setTimeout(() => controller.abort(), 1000);
       const res = await fetch(
         t
-          ? `https://lb-1.exptech.dev/api/v1/eq/eew/${t}`
+          ? `https://api-1.exptech.dev/api/v1/eq/eew/${t}`
           : `https://lb-1.exptech.dev/api/v1/eq/eew?t=${Date.now()}`,
         {
           signal: controller.signal,
