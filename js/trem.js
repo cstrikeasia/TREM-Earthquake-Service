@@ -125,8 +125,8 @@ $(document).ready(function () {
 
   const updateImage = (t) => {
     $image.src = t
-      ? `https://lb-1.exptech.com.tw/api/v1/trem/rts-image/${t}`
-      : `https://lb-1.exptech.com.tw/api/v1/trem/rts-image?t=${Date.now()}`;
+      ? `https://lb-1.exptech.dev/api/v1/trem/rts-image/${t}`
+      : `https://lb-1.exptech.dev/api/v1/trem/rts-image?t=${Date.now()}`;
   };
 
   const updateInfo = async (t) => {
@@ -135,8 +135,8 @@ $(document).ready(function () {
       const timer = setTimeout(() => controller.abort(), 1000);
       const res = await fetch(
         t
-          ? `https://lb-1.exptech.com.tw/api/v1/eq/eew/${t}`
-          : `https://lb-1.exptech.com.tw/api/v1/eq/eew?t=${Date.now()}`,
+          ? `https://lb-1.exptech.dev/api/v1/eq/eew/${t}`
+          : `https://lb-1.exptech.dev/api/v1/eq/eew?t=${Date.now()}`,
         {
           signal: controller.signal,
         }
@@ -154,7 +154,7 @@ $(document).ready(function () {
       const t = Date.now();
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 1000);
-      const res = await fetch("https://lb-1.exptech.com.tw/ntp", {
+      const res = await fetch("https://lb-1.exptech.dev/ntp", {
         signal: controller.signal,
       });
       clearTimeout(timer);
