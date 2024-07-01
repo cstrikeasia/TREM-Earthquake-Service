@@ -12,7 +12,7 @@ _end.val(Now1);
 let station_data;
 let region;
 const raw_url = 'https://raw.githubusercontent.com/ExpTechTW/API/master/resource/';
-const api_url = 'https://api.exptech.com.tw/';
+const api_url = 'https://api-1.exptech.com.tw/';
 
 axios.get(`${raw_url}region.json`)
     .then(function (res) {
