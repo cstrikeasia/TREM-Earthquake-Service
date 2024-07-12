@@ -1,150 +1,162 @@
 <html lang="zh-Hant">
-
-<head>
+  <head>
     <title id="title"></title>
     <meta charset="utf-8" />
     <meta content="TREM | 檢知報告" property="og:title" />
-    <meta content="Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )" property="og:description" />
-    <meta content="https://api-1.exptech.com.tw/file/trem_report.html" property="og:url" />
-    <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/ExpTech.jpg" property="og:image" />
-    <link rel="stylesheet" href="./css/trem_info.css">
-</head>
+    <meta
+      content="Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )"
+      property="og:description"
+    />
+    <meta
+      content="https://api-1.exptech.com.tw/file/trem_report.html"
+      property="og:url"
+    />
+    <meta
+      content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/ExpTech.jpg"
+      property="og:image"
+    />
+    <link rel="stylesheet" href="./css/trem_info.css" />
+  </head>
 
-<body style="user-select: none;">
+  <body style="user-select: none">
     <div>
-        <a href="https://api-1.exptech.com.tw/file/trem_report.html" class="button">返回</a>
-        <table id="cwa-table" style="display: none;">
-            <thead>
-                <tr>
-                    <th scope="col" colspan="7">CWA地震報告</th>
-                </tr>
-                <tr>
-                    <th scope="col">發生時刻</th>
-                    <th scope="col">震央地名</th>
-                    <th scope="col">北緯</th>
-                    <th scope="col">東經</th>
-                    <th scope="col">深度</th>
-                    <th scope="col">規模</th>
-                    <th scope="col">實測最大震度</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td id="cwa-time"></td>
-                    <td id="cwa-loc"></td>
-                    <td id="cwa-lat"></td>
-                    <td id="cwa-lon"></td>
-                    <td id="cwa-depth"></td>
-                    <td id="cwa-mag"></td>
-                    <td id="cwa-max"></td>
-                </tr>
-            </tbody>
-        </table>
-        <a id="cwa-link" style="display: none;">CWA地震報告</a>
-        <hr>
-        <div class="notice">
-            <span>僅供參考 實際結果請依 中央氣象署 發布之內容為準</span>
-            <p></p>
-            <span class="small">下方表格中 資料來源均為 TREM !!!</span>
-        </div>
-        <div style="padding: 10px;font-weight: bold;">
-            <span id="EventID"></span><br>
-            <span id="Source"></span><br>
-            <span id="Alert_time"></span>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col" colspan="17">TREM EEW</th>
-                </tr>
-                <tr>
-                    <th scope="col" rowspan="2">No.</th>
-                    <th scope="col" rowspan="2">發表時刻</th>
-                    <th scope="col" rowspan="2">檢知經過秒數</th>
-                    <th scope="col" rowspan="2">震後秒數</th>
-                    <th scope="col" colspan="13">震源・EEW資訊</th>
-                </tr>
-                <tr>
-                    <th scope="col">發生時刻</th>
-                    <th scope="col">震央地名</th>
-                    <th scope="col">北緯</th>
-                    <th scope="col">東經</th>
-                    <th scope="col">深度</th>
-                    <th scope="col">規模</th>
-                    <th scope="col">預估最大震度</th>
-                    <th scope="col">RTS</th>
-                    <th scope="col">方法</th>
-                    <th scope="col">原因</th>
-                    <th scope="col">觸發</th>
-                    <th scope="col">誤差△(km)</th>
-                    <th scope="col">警報狀態</th>
-                </tr>
-            </thead>
-            <tbody id="eew-table">
-            </tbody>
-        </table>
-        <div class="reference-table" id="tooltip">
-            EEW 原因對照表
-            <span class="tooltip-text">
-                <span>1 => EEW 預測震央 發生變化</span><br>
-                <span>2 => EEW 預測規模 發生變化</span><br>
-                <span>3 => 由於使用 NSSPE 方法進行的 預測震度 發生變化</span><br>
-                <span>4 => 釋出 最終報</span><br>
-                <span>5 => 釋出 取消報</span>
-            </span>
-        </div>
-        <hr>
-        <div class="notice">
-            <span class="small">下方表格為 TREM 系統 <b>自動觀測結果</b> 未經人為檢視確認 僅供參考</span>
-        </div>
-        <span style="padding: 3px; font-weight: bold; font-size: 18px;">測站列表</span>
-        <table>
-            <caption>Taiwan Real-time Earthquake Monitoring｜2024｜ExpTech Studio</caption>
-            <thead>
-                <tr>
-                    <th scope="col" colspan="18">TREM 測站紀錄數據</th>
-                </tr>
-                <tr>
-                    <th scope="col" rowspan="3">ID</th>
-                    <th scope="col" rowspan="3">Net</th>
-                    <th scope="col" rowspan="3">地名</th>
-                    <th scope="col" colspan="15">紀錄數據</th>
-                </tr>
-                <tr>
-                    <th scope="col" colspan="3">加速度</th>
-                    <th scope="col" colspan="3">速度</th>
-                    <th scope="col" colspan="6">最大值</th>
-                    <th scope="col" colspan="2">時間</th>
-                    <th scope="col" colspan="1">檔案</th>
-                </tr>
-                <tr>
-                    <th scope="col">加速度EW</th>
-                    <th scope="col">加速度NS</th>
-                    <th scope="col">加速度UD</th>
-                    <th scope="col">速度EW</th>
-                    <th scope="col">速度NS</th>
-                    <th scope="col">速度UD</th>
-                    <th scope="col">PGA</th>
-                    <th scope="col">PGV</th>
-                    <th scope="col">最大計測震度</th>
-                    <th scope="col">最大震度階</th>
-                    <th scope="col">SVA</th>
-                    <th scope="col">LPGM</th>
-                    <th scope="col">開始時間</th>
-                    <th scope="col">結束時間</th>
-                    <th scope="col">Zip</th>
-                </tr>
-            </thead>
-            <tbody id="station-table">
-            </tbody>
-        </table>
+      <!--a href="https://api-1.exptech.com.tw/file/trem_report.html" class="button">返回</a-->
+      <table id="cwa-table" style="display: none">
+        <thead>
+          <tr>
+            <th scope="col" colspan="7">CWA地震報告</th>
+          </tr>
+          <tr>
+            <th scope="col">發生時刻</th>
+            <th scope="col">震央地名</th>
+            <th scope="col">北緯</th>
+            <th scope="col">東經</th>
+            <th scope="col">深度</th>
+            <th scope="col">規模</th>
+            <th scope="col">實測最大震度</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="cwa-time"></td>
+            <td id="cwa-loc"></td>
+            <td id="cwa-lat"></td>
+            <td id="cwa-lon"></td>
+            <td id="cwa-depth"></td>
+            <td id="cwa-mag"></td>
+            <td id="cwa-max"></td>
+          </tr>
+        </tbody>
+      </table>
+      <a id="cwa-link" style="display: none">CWA地震報告</a>
+      <hr />
+      <div class="notice">
+        <span>僅供參考 實際結果請依 中央氣象署 發布之內容為準</span>
+        <p></p>
+        <span class="small">下方表格中 資料來源均為 TREM !!!</span>
+      </div>
+      <div style="padding: 10px; font-weight: bold">
+        <span id="EventID"></span><br />
+        <span id="Source"></span><br />
+        <span id="Alert_time"></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col" colspan="17">TREM EEW</th>
+          </tr>
+          <tr>
+            <th scope="col" rowspan="2">No.</th>
+            <th scope="col" rowspan="2">發表時刻</th>
+            <th scope="col" rowspan="2">檢知經過秒數</th>
+            <th scope="col" rowspan="2">震後秒數</th>
+            <th scope="col" colspan="13">震源・EEW資訊</th>
+          </tr>
+          <tr>
+            <th scope="col">發生時刻</th>
+            <th scope="col">震央地名</th>
+            <th scope="col">北緯</th>
+            <th scope="col">東經</th>
+            <th scope="col">深度</th>
+            <th scope="col">規模</th>
+            <th scope="col">預估最大震度</th>
+            <th scope="col">RTS</th>
+            <th scope="col">方法</th>
+            <th scope="col">原因</th>
+            <th scope="col">觸發</th>
+            <th scope="col">誤差△(km)</th>
+            <th scope="col">警報狀態</th>
+          </tr>
+        </thead>
+        <tbody id="eew-table"></tbody>
+      </table>
+      <div class="reference-table" id="tooltip">
+        EEW 原因對照表
+        <span class="tooltip-text">
+          <span>1 => EEW 預測震央 發生變化</span><br />
+          <span>2 => EEW 預測規模 發生變化</span><br />
+          <span>3 => 由於使用 NSSPE 方法進行的 預測震度 發生變化</span><br />
+          <span>4 => 釋出 最終報</span><br />
+          <span>5 => 釋出 取消報</span>
+        </span>
+      </div>
+      <hr />
+      <div class="notice">
+        <span class="small"
+          >下方表格為 TREM 系統 <b>自動觀測結果</b> 未經人為檢視確認
+          僅供參考</span
+        >
+      </div>
+      <span style="padding: 3px; font-weight: bold; font-size: 18px"
+        >測站列表</span
+      >
+      <table>
+        <caption>
+          Taiwan Real-time Earthquake Monitoring｜2024｜ExpTech Studio
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col" colspan="18">TREM 測站紀錄數據</th>
+          </tr>
+          <tr>
+            <th scope="col" rowspan="3">ID</th>
+            <th scope="col" rowspan="3">Net</th>
+            <th scope="col" rowspan="3">地名</th>
+            <th scope="col" colspan="15">紀錄數據</th>
+          </tr>
+          <tr>
+            <th scope="col" colspan="3">加速度</th>
+            <th scope="col" colspan="3">速度</th>
+            <th scope="col" colspan="6">最大值</th>
+            <th scope="col" colspan="2">時間</th>
+            <th scope="col" colspan="1">檔案</th>
+          </tr>
+          <tr>
+            <th scope="col">加速度EW</th>
+            <th scope="col">加速度NS</th>
+            <th scope="col">加速度UD</th>
+            <th scope="col">速度EW</th>
+            <th scope="col">速度NS</th>
+            <th scope="col">速度UD</th>
+            <th scope="col">PGA</th>
+            <th scope="col">PGV</th>
+            <th scope="col">最大計測震度</th>
+            <th scope="col">最大震度階</th>
+            <th scope="col">SVA</th>
+            <th scope="col">LPGM</th>
+            <th scope="col">開始時間</th>
+            <th scope="col">結束時間</th>
+            <th scope="col">Zip</th>
+          </tr>
+        </thead>
+        <tbody id="station-table"></tbody>
+      </table>
     </div>
     <div id="loading">
-        <div id="loading-spinner">
-            <div class="spinner-circle"></div>
-        </div>
+      <div id="loading-spinner">
+        <div class="spinner-circle"></div>
+      </div>
     </div>
     <script src="./js/trem_info.js"></script>
-</body>
-
+  </body>
 </html>
