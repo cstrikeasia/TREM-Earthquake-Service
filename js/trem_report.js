@@ -148,7 +148,7 @@ function eew_table(data) {
     const index = document.createElement("td");
     index.textContent = i + 1;
     const link = document.createElement("a");
-    link.href = `https://api-1.exptech.com.tw/file/trem_info.html?id=${trem.ID}&key=${params.key}`;
+    link.href = `https://api-1.exptech.dev/file/trem_info.html?id=${trem.ID}&key=${params.key}`;
     link.target = "_blank";
     link.textContent = formatTime(Number(trem.ID)).replaceAll("/", "").replaceAll(":", "").replace(" ", "");
     const id = document.createElement("td");
@@ -245,7 +245,7 @@ function searchEq(id) {
 
 async function fetchEqData() {
   try {
-    const res = await fetch(`https://api-1.exptech.com.tw/api/v2/eq/report?limit=50&key=${params.key}`);
+    const res = await fetch(`https://api-1.exptech.dev/api/v2/eq/report?limit=50&key=${params.key}`);
     eq_data = await res.json();
   } catch (err) {
     console.log(err);
@@ -254,7 +254,7 @@ async function fetchEqData() {
 
 async function fetchTREMData() {
   try {
-    const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/list?key=${params.key}`);
+    const res = await fetch(`https://api-1.exptech.dev/api/v1/trem/list?key=${params.key}`);
     trem_data = await res.json();
   } catch (err) {
     console.log(err);
@@ -263,7 +263,7 @@ async function fetchTREMData() {
 
 async function fetchMonthData() {
   try {
-    const res = await fetch('https://api-1.exptech.com.tw/api/v1/trem/month');
+    const res = await fetch('https://api-1.exptech.dev/api/v1/trem/month');
     month_data = await res.json();
   } catch (err) {
     console.log(err);
@@ -272,7 +272,7 @@ async function fetchMonthData() {
 
 async function fetchSpecifyMonthData(d) {
   try {
-    const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/month/${d}`);
+    const res = await fetch(`https://api-1.exptech.dev/api/v1/trem/month/${d}`);
     return res.json();
   } catch (err) {
     console.log(err);

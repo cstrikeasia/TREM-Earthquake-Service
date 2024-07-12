@@ -188,7 +188,7 @@ async function start() {
 
     const station_list = JSON.parse(trem.List);
 
-    fetch("https://api-1.exptech.com.tw/api/v1/trem/info", {
+    fetch("https://api-1.exptech.dev/api/v1/trem/info", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ list: station_list }),
@@ -258,7 +258,7 @@ async function start() {
                 end.textContent = station.end;
                 const zip = document.createElement("td");
                 const link = document.createElement("a");
-                link.href = `https://api-1.exptech.com.tw/file/trem_report/${station.ID}.zip`;
+                link.href = `https://api-1.exptech.dev/file/trem_report/${station.ID}.zip`;
                 link.target = "_blank";
                 link.textContent = "zip";
                 zip.append(link);
@@ -295,7 +295,7 @@ function searechStationInfo(ans, id) {
 
 async function searchTrem(id) {
     try {
-        const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/list/${id}?key=${params.key}`);
+        const res = await fetch(`https://api-1.exptech.dev/api/v1/trem/list/${id}?key=${params.key}`);
         return await res.json();
     } catch (err) {
         console.log(err);
@@ -304,7 +304,7 @@ async function searchTrem(id) {
 
 async function searchEq(id) {
     try {
-        const res = await fetch(`https://api-1.exptech.com.tw/api/v2/eq/report/${id}?key=${params.key}`);
+        const res = await fetch(`https://api-1.exptech.dev/api/v2/eq/report/${id}?key=${params.key}`);
         return await res.json();
     } catch (err) {
         console.log(err);
@@ -340,7 +340,7 @@ async function fetchRegionInfo() {
 
 async function fetchTREMEEW(id) {
     try {
-        const res = await fetch(`https://api-1.exptech.com.tw/api/v1/trem/report/${id}`);
+        const res = await fetch(`https://api-1.exptech.dev/api/v1/trem/report/${id}`);
         return await res.json();
     } catch (err) {
         console.log(err);
