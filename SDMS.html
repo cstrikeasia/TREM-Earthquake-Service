@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TREM SDMS</title>
+    <meta content="TREM SDMS" property="og:title">
+    <meta content="Seismic Data Management System | 地震資料管理系統" property="og:description">
+    <meta content="https://exptechtw.github.io/" property="og:url">
+    <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/image/Icon/ExpTech.png" property="og:image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="./css/SDMS.css">
+</head>
+
+<body style="background-color: #f4f4f4; font-family: 'Roboto', sans-serif;">
+    <div class="main">
+        <div class="body">
+            <div class="title">Seismic Data Management System</div>
+            <div class="subtitle">地震資料管理系統</div>
+            <div class="stations_box">
+                <div class="stations_title">觀測網</div>
+                <select class="stations_text" id="Network">
+                    <option value="MS" selected>MS-Net | 微地震觀測網</option>
+                    <option value="SE">SE-Net | 強震觀測網</option>
+                </select>
+            </div>
+            <div class="stations_box">
+                <div class="stations_title">測站代碼</div>
+                <select class="stations_text" id="stations"></select>
+            </div>
+            <div class="time">
+                <div class="start_box">
+                    <div class="start_title">起始時間</div>
+                    <input class="start_text" id="start" type="text">
+                </div>
+                <div class="end_box">
+                    <div class="end_title">結束時間</div>
+                    <input class="end_text" id="end" type="text">
+                </div>
+            </div>
+            <div class="button_box">
+                <button class="button_text" id="button" type="button" onclick="download()"><i
+                        class="fas fa-download"></i> 下載</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0/axios.min.js"></script>
+    <script src="./JS/SDMS.js"></script>
+</body>
+
+</html>

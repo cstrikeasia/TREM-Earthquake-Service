@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <title id="title"></title>
+  <meta charset="utf-8" />
+  <meta content="TREM | 檢知報告" property="og:title" />
+  <meta content="Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )" property="og:description" />
+  <meta content="https://api-1.exptech.com.tw/file/trem_report.html" property="og:url" />
+  <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/ExpTech.jpg" property="og:image" />
+  <link rel="stylesheet" type="text/css" href="./css/trem_report.css">
+</head>
+
+<body style="display: grid;text-align: center;">
+  <div style="display: grid;justify-items: center;">
+    <div class="title">
+      <a>僅供參考 實際結果請依 中央氣象署 發布之內容為準</a><br>
+      <a>下方表格中 若未特別註記 資料來源均為 TREM</a>
+    </div>
+
+    <table id="month">
+      <tbody>
+      </tbody>
+    </table>
+
+    <div id="dev_mode">
+      <input id="checkbox" type="checkbox">
+      <a>Dev Mode</a>
+    </div>
+
+    <div class="table-container">
+      <table class="data">
+        <caption>Taiwan Real-time Earthquake Monitoring｜2024｜ExpTech Studio</caption>
+        <thead>
+          <tr>
+            <th scope="col" colspan="15">TREM EEW</th>
+          </tr>
+          <tr>
+            <th scope="col" rowspan="2">No.</th>
+            <th scope="col" rowspan="2">EventID</th>
+            <th scope="col" rowspan="2">發表單位</th>
+            <th scope="col" rowspan="2">報數</th>
+            <th scope="col" colspan="11">震源・EEW資訊</th>
+          </tr>
+          <tr>
+            <th scope="col">檢知時刻</th>
+            <th scope="col">發震時刻(CWA)</th>
+            <th scope="col">震央地名</th>
+            <th scope="col">北緯</th>
+            <th scope="col">東經</th>
+            <th scope="col">深度</th>
+            <th scope="col">規模</th>
+            <th scope="col">預估最大震度</th>
+            <th scope="col">實測最大震度(CWA)</th>
+            <th scope="col">實測最大長周期<br>地震動階級</th>
+            <th scope="col">RTS</th>
+          </tr>
+        </thead>
+        <tbody id="body">
+        </tbody>
+      </table>
+    </div>
+    <div class="tool_tip">
+      <button id="topButton" title="返回頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-up-fill"
+          viewBox="0 0 30 30">
+          <path
+            d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z">
+          </path>
+        </svg>
+      </button>
+      <div>
+        <div id="pagination">
+          <div id="filterContainer">
+            <label for="magnitudeFilter">篩選預估最大震度</label>
+            <select id="magnitudeFilter">
+              <option value="">全部</option>
+            </select>
+          </div>
+          <div style="display: contents;">
+            <div id="openButton">選擇分頁</div>
+            <button id="prevPage">上一頁</button>
+            <span id="currentPage">-</span>
+            <span>—</span>
+            <span id="totalPages">-</span>
+            <button id="nextPage">下一頁</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="loading">
+    <div id="loading-spinner">
+      <div class="spinner-circle"></div>
+    </div>
+  </div>
+  <script src="./js/trem_report.js"></script>
+</body>
+
+</html>
