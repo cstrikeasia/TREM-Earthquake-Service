@@ -7,11 +7,12 @@
     <meta content="Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )" property="og:description" />
     <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/ExpTech.jpg" property="og:image" />
     <link rel="stylesheet" href="./css/trem_info.css">
+    <script src="./js/config.js"></script>
 </head>
 
 <body style="user-select: none;">
     <div>
-        <a href="https://api-1.exptech.com.tw/file/trem_report.html" class="button">返回</a>
+        <a id="link" class="button">返回</a>
         <table id="cwa-table" style="display: none;">
             <thead>
                 <tr>
@@ -138,6 +139,9 @@
             </tbody>
         </table>
     </div>
+    <script>
+        document.getElementById("link").href = `https://${URL_MAIN}/file/trem_report.html`
+    </script>
     <div id="loading">
         <div id="loading-spinner">
             <div class="spinner-circle"></div>
