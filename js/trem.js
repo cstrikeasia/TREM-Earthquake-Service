@@ -126,7 +126,7 @@ $(document).ready(function () {
   const updateImage = (t) => {
     $image.src = t
       ? `https://${URL_MAIN}/api/v1/trem/rts-image/${t}`
-      : `https://${URL_MAIN}/api/v1/trem/rts-image?t=${Date.now()}`;
+      : `https://${URL_MAIN.replace("api", "lb")}/api/v1/trem/rts-image`;
   };
 
   const updateInfo = async (t) => {
@@ -136,7 +136,7 @@ $(document).ready(function () {
       const res = await fetch(
         t
           ? `https://${URL_MAIN}/api/v1/eq/eew/${t}`
-          : `https://${URL_MAIN}/api/v1/eq/eew?t=${Date.now()}`,
+          : `https://${URL_MAIN.replace("api", "lb")}/api/v1/eq/eew`,
         {
           signal: controller.signal,
         }
