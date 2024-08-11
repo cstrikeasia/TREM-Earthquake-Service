@@ -76,7 +76,7 @@
             <button id="switch">暫停</button>
             <button id="audio">開啟音效</button>
           </div>
-          <a class="more-info" href="https://api.exptech.com.tw/file/trem_more.html">更多資訊 >></a>
+          <a class="more-info" id="link">更多資訊 >></a>
         </div>
       </div>
     </div>
@@ -95,6 +95,9 @@
       body.classList.toggle("light");
       body.classList.toggle("dark");
     }
+  </script>
+  <script>
+    document.getElementById("link").href = `https://${URL_MAIN}/file/trem_more.html`
   </script>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
     integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
