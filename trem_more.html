@@ -147,11 +147,11 @@
         </div>
     </div>
     </div>
-    <script>
-        document.getElementById("link-1").onclick = link(`https://${URL_MAIN}/file/trem.html`)
-        document.getElementById("link-2").onclick = link(`https://${URL_MAIN}/file/trem_report.html`)
-    </script>
     <script src="./js/trem_more.js"></script>
+    <script>
+        document.getElementById("link-1").onclick = () => link(`${URL_MAIN}/file/trem.html`);
+        document.getElementById("link-2").onclick = () => link(`${URL_MAIN}/file/trem_report.html`);
+    </script>
 </body>
 
 </html>
