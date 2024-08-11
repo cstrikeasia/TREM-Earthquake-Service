@@ -125,8 +125,8 @@ $(document).ready(function () {
 
   const updateImage = (t) => {
     $image.src = t
-      ? `https://api-1.exptech.dev/api/v1/trem/rts-image/${t}`
-      : `https://api-1.exptech.dev/api/v1/trem/rts-image?t=${Date.now()}`;
+      ? `https://${URL_MAIN}/api/v1/trem/rts-image/${t}`
+      : `https://${URL_MAIN}/api/v1/trem/rts-image?t=${Date.now()}`;
   };
 
   const updateInfo = async (t) => {
@@ -135,8 +135,8 @@ $(document).ready(function () {
       const timer = setTimeout(() => controller.abort(), 1000);
       const res = await fetch(
         t
-          ? `https://api-1.exptech.dev/api/v1/eq/eew/${t}`
-          : `https://api-1.exptech.dev/api/v1/eq/eew?t=${Date.now()}`,
+          ? `https://${URL_MAIN}/api/v1/eq/eew/${t}`
+          : `https://${URL_MAIN}/api/v1/eq/eew?t=${Date.now()}`,
         {
           signal: controller.signal,
         }
@@ -231,7 +231,10 @@ $(document).ready(function () {
         $eew_scale.textContent = EQ.eq.mag.toFixed(1);
         $eew_depth.textContent = `${EQ.eq.depth}`;
         $eew_max.textContent = !EQ.eq.max ? "未知" : Intensity[EQ.eq.max].text;
-        $eew_info.className = $eew_info.className.replace(/\bintensity_\S+/g, '');
+        $eew_info.className = $eew_info.className.replace(
+          /\bintensity_\S+/g,
+          ""
+        );
         $eew_info.classList.add(`intensity_${EQ.eq.max}`);
         if (!EQ.eq.max) {
           $eew_info.style.color = "yellow";
