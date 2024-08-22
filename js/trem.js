@@ -197,9 +197,9 @@ $(document).ready(function () {
     if (!lock) {
       $timeline.value = 86400 - (!time ? 0 : (Now().getTime() - time) / 1000);
       $time.textContent = `${time_string(!time ? Now().getTime() : time)} (${
-        $time.style.color == "yellow"
+        $time.style.color == "#fdfd77"
           ? "重播"
-          : $time.style.color == "red"
+          : $time.style.color == "#ff5757"
           ? "暫停"
           : "即時"
       })`;
@@ -231,7 +231,10 @@ $(document).ready(function () {
         $eew_scale.textContent = EQ.eq.mag.toFixed(1);
         $eew_depth.textContent = `${EQ.eq.depth}`;
         $eew_max.textContent = !EQ.eq.max ? "未知" : Intensity[EQ.eq.max].text;
-        $eew_info.className = $eew_info.className.replace(/\bintensity_\S+/g, '');
+        $eew_info.className = $eew_info.className.replace(
+          /\bintensity_\S+/g,
+          ""
+        );
         $eew_info.classList.add(`intensity_${EQ.eq.max}`);
         if (!EQ.eq.max) {
           $eew_info.style.color = "yellow";
