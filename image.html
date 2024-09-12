@@ -12,6 +12,7 @@
       property="og:image"
     />
     <link rel="stylesheet" href="./css/image.css" />
+    <script src="./js/config.js"></script>
   </head>
 
   <body>
@@ -20,7 +21,7 @@
       <div class="subtitle">每分鐘自動刷新</div>
       <div class="buttons">
         <a
-          href="https://api-1.exptech.com.tw/file/trem_info.html"
+          href="https://api-1.exptech.dev/file/trem_info.html"
           class="button"
           target="_blank"
           >TREM Earthquake History</a
@@ -37,14 +38,20 @@
           target="_blank"
           >Instagram</a
         >
+        <a href="https://www.threads.net/@dpip.tw" class="button" target="_blank">Threads</a>
+        <a href="https://exptech.com.tw" class="button" target="_blank">ExpTech Studio</a>
       </div>
       <div class="box">
         <img src="" alt="" id="eew" class="img" />
         <img src="" alt="" id="report" class="img" />
-        <img src="" alt="" id="i-cwb" class="img" />
-        <img src="" alt="" id="i-trem" class="img" />
+        <img src="" alt="" id="intensity" class="img" />
+        <img src="" alt="" id="lpgm" class="img" />
       </div>
     </div>
+
+    <script>
+        document.getElementById("link").href = `https://${URL_MAIN}/file/trem_report.html`
+    </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0/axios.min.js"></script>
     <script src="./js/image.js"></script>

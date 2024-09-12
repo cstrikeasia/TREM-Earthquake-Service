@@ -8,6 +8,7 @@
     <meta content="https://exptechtw.github.io/" property="og:url" />
     <meta content="https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/image/Icon/ExpTech.png" property="og:image" />
     <link rel="stylesheet" href="./css/trem_more.css">
+    <script src="./js/config.js"></script>
 </head>
 
 <body>
@@ -85,7 +86,7 @@
             </div>
         </div>
         <div style="display: flex;">
-            <div class="link" onclick="link('discord.gg/exptech-studio')">
+            <div class="link" onclick="link('exptech.com.tw/dc')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 50 50"
                     class="bi bi-discord">
                     <path
@@ -99,27 +100,8 @@
                         d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
                 </svg>
             </div>
-            <div class="link" onclick="link('twitter.com/ExpTech_TREM')">
-                <svg viewBox="328 355 335 276" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
-                    class="bi bi-twitter">
-                    <path d="
-                      M 630, 425
-                      A 195, 195 0 0 1 331, 600
-                      A 142, 142 0 0 0 428, 570
-                      A  70,  70 0 0 1 370, 523
-                      A  70,  70 0 0 0 401, 521
-                      A  70,  70 0 0 1 344, 455
-                      A  70,  70 0 0 0 372, 460
-                      A  70,  70 0 0 1 354, 370
-                      A 195, 195 0 0 0 495, 442
-                      A  67,  67 0 0 1 611, 380
-                      A 117, 117 0 0 0 654, 363
-                      A  65,  65 0 0 1 623, 401
-                      A 117, 117 0 0 0 662, 390
-                      A  65,  65 0 0 1 630, 425
-                      Z" fill="#FFFFFF"></path>
-                </svg>
-                <div class="link-text">Twitter</div>
+            <div class="link" onclick="link('www.threads.net/@dpip.tw')">
+                <div class="link-text">Threads</div>
                 <svg width="25px" height="25px" fill="currentColor" class="bi bi-arrow-right-square"
                     viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
@@ -156,7 +138,7 @@
                 </svg>
             </div>
             <div class="link" onclick="link('status.exptech.dev')">
-                <div class="link-text">伺服器流量</div>
+                <div class="link-text">伺服器狀態</div>
                 <svg width="25px" height="25px" fill="currentColor" class="bi bi-arrow-right-square"
                     viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
@@ -167,6 +149,10 @@
     </div>
     </div>
     <script src="./js/trem_more.js"></script>
+    <script>
+        document.getElementById("link-1").onclick = () => link(`${URL_MAIN}/file/trem.html`);
+        document.getElementById("link-2").onclick = () => link(`${URL_MAIN}/file/trem_report.html`);
+    </script>
 </body>
 
 </html>

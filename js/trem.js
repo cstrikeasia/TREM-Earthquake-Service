@@ -125,8 +125,11 @@ $(document).ready(function () {
 
   const updateImage = (t) => {
     $image.src = t
-      ? `https://api-1.exptech.dev/api/v1/trem/rts-image/${t}`
-      : `https://api-1.exptech.dev/api/v1/trem/rts-image?t=${Date.now()}`;
+      ? `https://${URL_MAIN}/api/v1/trem/rts-image/${t}`
+      : `https://${URL_MAIN.replace(
+          "api",
+          "lb"
+        )}/api/v1/trem/rts-image?t=${Date.now()}`;
   };
 
   const updateInfo = async (t) => {
@@ -135,8 +138,8 @@ $(document).ready(function () {
       const timer = setTimeout(() => controller.abort(), 1000);
       const res = await fetch(
         t
-          ? `https://api-1.exptech.dev/api/v1/eq/eew/${t}`
-          : `https://api-1.exptech.dev/api/v1/eq/eew?t=${Date.now()}`,
+          ? `https://${URL_MAIN}/api/v1/eq/eew/${t}`
+          : `https://${URL_MAIN.replace("api", "lb")}/api/v1/eq/eew`,
         {
           signal: controller.signal,
         }
