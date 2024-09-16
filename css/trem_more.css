@@ -119,13 +119,6 @@ body {
   fill: #fff;
 }
 
-.bi-github,
-.bi-youtube,
-.bi-discord,
-.bi-twitter {
-  margin-right: 0.5em;
-}
-
 img {
   display: block;
   max-width: 100%;
@@ -133,6 +126,11 @@ img {
   margin: auto;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.link img {
+  margin: inherit;
+  margin-right: 0.5em;
 }
 
 .intensity0 {
